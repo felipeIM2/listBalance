@@ -431,7 +431,7 @@ filtroMes()
               
               
         
-          document.getElementById('baixarJSON').addEventListener('click', function() {
+          document.getElementById('downloadJson').addEventListener('click', function() {
 
             let data = JSON.stringify(localStorage.getItem("transacoes"))
               const blob = new Blob([data], { type: 'application/json' });
