@@ -3,10 +3,12 @@
 
 
 * {
+ 
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Montserrat", serif;
+  
 }
 
 body {
@@ -15,20 +17,27 @@ body {
   background-color: rgb(0, 56, 73);
 }
 
+
+
 .container {
   display: flex;
   gap: 10px;
   width: 100%;
+  
 }
+
 
 /* Menu Lateral */
 .menu-lateral {
   background-color: rgb(0, 68, 88);
   width: 180px;
-  height: 142%;
   color: white;
   padding: 10px;
+  min-height: 100%;
+  max-height: 150%;
 }
+
+
 .menu-lateral p {
   text-align: center;
   margin-top: 10px;
@@ -135,11 +144,10 @@ td {
 .campo-despesas {
   background-color: white;
   padding: 20px;
-  margin-right:30px;
   margin-top: 10px;
   min-height: 300px;
   max-height: 400px;
-  width: 50%;
+  width: 45%;
   border-radius: 8px;
   justify-items: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -149,12 +157,11 @@ td {
 .campo-adicional {
   background-color: white;
   margin-top: 10px;
-  /* margin-bottom: 90px; */
+  width:  96%;
   border-radius: 8px;
-  width: 95%;
   justify-items: center;
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 } 
@@ -162,7 +169,7 @@ td {
 .campo-receitas {
   background-color: white;
   padding: 20px;
-  margin-left: 30px;
+
   margin-top: 10px;
   min-height: 300px;
   max-height: 400px;
@@ -213,6 +220,8 @@ select {
 .organizar-campo {
   display: flex;
   gap: 10px;
+  /* background-color: #d32f2f; */
+  justify-content: center;
   margin: none;
 }
 

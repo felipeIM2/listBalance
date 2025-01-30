@@ -474,3 +474,16 @@ filtroMes()
                 alert("Por favor, selecione um arquivo JSON válido.");
             }
         });
+
+
+window.addEventListener("resize", () => {
+  let altura = window.innerHeight;
+  
+  if(altura >= 622){
+    let alturaMenuLateral = document.querySelector(".menu-lateral");
+      alturaMenuLateral.style = "height:145%"
+      
+  }else {
+    location.reload()
+  }
+})
