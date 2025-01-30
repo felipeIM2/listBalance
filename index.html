@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout com Menu Lateral</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu lateral -->
+    <div class="menu-lateral">
+      
+      <div>
+        <p>Vizualizar:</p>
+        <select name="" id="ver-usuario" class="ver-usuario">
+          <option value="" placeholder="">
+            Todos
+          </option>        
+          <option value="" placeholder="">
+            Luis
+          </option>
+          <option value="" placeholder="">
+            Nat
+          </option>
+        </select>
+      </div>
+      <div>
+       <!-- <input type="date"> -->
+       <select id="mes" name="mes">
+        
+       </select>
+      </div>
+      <ul>
+        <li><a href="/cadFin/">Novo Registro</a></li>
+        <li><a href="#outras-opcoes">Outras Opções</a></li>
+        <button id="baixarJSON">Baixar JSON</button>
+        <input type="file" accept=".json" id="uploadFile"></input>
+        
+      </ul>
+    </div>
+
+    <div class="ajuste-tela">
+    <div class="lista">
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>%</th>
+            <th>Categoria</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>#</th>
+          </tr>
+        </thead>
+        <tbody id="body">
+          
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Campos de Despesas, Receitas e Campo Adicional -->
+    <div class="despesas-receitas">
+      
+      <div class="organizar-campo">
+  
+        <div class="campo-receitas">
+          <div class="nav-receita">
+            <h3>Receitas</h3>
+            <select name="" id="receitaSelect">
+              <option value="fixa">Fixa</option>
+              <option value="variavel">Variável</option>
+            </select>
+          </div>
+          <div class="receitas-nav">
+            <!-- <h4>Descrição</h4>
+            <h4>Valor</h4> -->
+
+            <ul type="none">
+              <li>
+                <span>Descrição</span>
+                <span id="receitaDescricao"></span>
+              </li>
+              <li>
+                <span>Valor</span>
+                <span id="receitaValor"></span>
+              </li>
+              <li>
+                <span></span>
+                <span></span>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+        <div class="campo-despesas">
+          <div class="nav-despesa">
+            <h3>Despesas</h3>
+            <select name="" id="despesaSelect">
+              <option value="fixa">Fixa</option>
+              <option value="variavel">Variável</option>
+            </select>
+          </div>
+          <div class="despesas-nav">
+            <ul type="none">
+              <li>
+                <span>Descrição</span>
+                <span id="despesaDescricao"></span>
+              </li>
+              <li>
+                <span>Valor</span>
+                <span id="despesaValor"></span>
+              </li>
+              <li>
+                <span>Parcelas</span>
+                <span id="despesaParcela"></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <!-- Novo campo adicional -->
+      <div class="campo-adicional">
+        <h3>Totalizadores:</h3>
+        <div class="totalizadores">
+
+          <div class="totalReceitas">
+            RECEITAS
+            <div id="receitaTotalFixa">Valor1</div>
+            <div id="receitaTotalVariavel">Valor2</div>
+            <div id="receitaTotal">Valor3</div>
+          </div>
+          <div class="totalDespesas">
+            DESPESAS
+            <div id="despesaTotalFixa">Valor1</div>
+            <div id="despesaTotalVariavel">Valor2</div>
+            <div id="despesaTotal">Valor3</div>
+          </div>
+
+          <div class="lucro">
+            <p>LUCRO TOTAL</p>
+            <div id="lucro" >Valor1</div>
+            <p>Despesa/aberto</p>
+            <div id="reduzirLucro">redutor</div>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+  <div id="modalEditar" class="modalOFF">
+    <button class="fecharModalEdicao" id="fecharModalEdicao"> Sair </button>
+    <div class="editarFormulario">
+
+      <label for="nomeCelula">Descrição:</label>
+      <input type="text" disabled id="nomeCelula">
+
+      <label for="valorCelula">Valor:</label>
+      <input type="text" id="valorCelula">
+
+      <label for="tipoCelula">Tipo:</label>
+      <input type="text" disabled id="tipoCelula">
+
+      <label for="selectStatus">Status:</label>
+      <select id="selectStatus">
+        <option value="" id="optAtual"></option>
+        <option value="Quitado">Quitado</option>
+      </select>
+
+      <button id="excluirRegistro">Excluir Registro</button>
+      <button id="salvarEdicao">Salvar</button>
+    </div>
+  </div>
+
+</body>
+<script src="/script.js"></script>
+</html>
