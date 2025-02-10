@@ -27,7 +27,6 @@ document.getElementById("adicionar").addEventListener("click", () =>{
   const tipo = document.getElementById('tipo').value;
 
   let pessoa =  document.getElementById("pessoa").value
-  let parcela =  parseFloat(document.getElementById("parcelado").value)
 
   const hoje = new Date(); 
   const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');
@@ -35,10 +34,22 @@ document.getElementById("adicionar").addEventListener("click", () =>{
   const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
 
   let status;
+  let parcela;
+
   if(categoria === "receita"){
+
     status = "Entrada"
-  }else{
+    parcela = 1
+
+  } else if(categoria === "despesa"){
+
     status = "Aberto"
+    parcela =  parseFloat(document.getElementById("parcelado").value)
+
+    if(tipo === "fixa") { 
+      parcela = 1
+    }
+    
   }
 
   let id;
@@ -51,6 +62,7 @@ document.getElementById("adicionar").addEventListener("click", () =>{
 
   
    transacoes.push({ id, descricao, valor, categoria, tipo, pessoa, parcela, mesHoje, status});
+   console.log(transacoes)
    localStorage.setItem('transacoes', JSON.stringify(transacoes));
 
   document.getElementById('descricao').value = '';

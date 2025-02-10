@@ -1,23 +1,212 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planilha
+
+  </title>
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChartR);
+    google.charts.setOnLoadCallback(drawChartD);
+    google.charts.setOnLoadCallback(drawChartT);
+
+
+      function drawChartR() {
+            
+        let num1;
+        let num2;
+        let num3;
+       
+        let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
+
+          if(transacoes){
+            let somaReceitasFixas = transacoes.reduce((total, e) => {
+              if (e.categoria === 'receita' && e.tipo === 'fixa') {
+                return total + parseFloat(e.valor);
+              }
+              return total;
+            }, 0); 
+            num1  = somaReceitasFixas
+          }
+
+          if(transacoes){
+            let somaReceitasVariaveis = transacoes.reduce((total, e) => {
+              if (e.categoria === 'receita' && e.tipo === 'variavel') {
+                return total + parseFloat(e.valor); 
+              }
+              return total;
+            }, 0); 
+            num2 = somaReceitasVariaveis
+          }
+          if(transacoes){
+            let somaReceitas = transacoes.reduce((total, e) => {
+              if(e.categoria === "receita"){
+                return total + parseFloat(e.valor); 
+              }
+            return total
+            }, 0); 
+            num3 = somaReceitas
+          }
+
+          let data = google.visualization.arrayToDataTable([
+            ['Task', ''],
+            ['Fixa',   num1],
+            ['Variavel',   num2],
+            ['Total',  num3],
+            
+          ]);
+
+          let options = {
+            title: 'Receitas',
+            is3D: true,
+          };
+
+          var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
+
+          chart.draw(data, options);
+        }
+
+      function drawChartD() {
+          
+          let num1;
+          let num2;
+          let num3;
+          
+          let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
+  
+            if(transacoes){
+              let somaDespesasFixas = transacoes.reduce((total, e) => {
+                if (e.categoria === 'despesa' && e.tipo === 'fixa') {
+                  return total + parseFloat(e.valor);
+                }
+                return total;
+              }, 0); 
+              num1 = somaDespesasFixas
+            }
+  
+            if(transacoes){
+              let somaDespesasVariaveis = transacoes.reduce((total, e) => {
+                if (e.categoria === 'despesa' && e.tipo === 'variavel') {
+                  return total + parseFloat(e.valor); 
+                }
+                return total;
+              }, 0); 
+              num2 = somaDespesasVariaveis
+            }
+
+            if(transacoes){
+              let somaDespesas = transacoes.reduce((total, e) => {
+                if(e.categoria === "despesa"){
+                  return total + parseFloat(e.valor); 
+                }
+              return total
+              }, 0); 
+
+              num3 = somaDespesas
+            }
+  
+            let data = google.visualization.arrayToDataTable([
+              ['Task', ''],
+              ['Fixa',   num1],
+              ['Variavel',   num2],
+              ['Total',  num3],
+              
+            ]);
+  
+            let options = {
+              title: 'Despesas',
+              is3D: true,
+            };
+  
+            var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
+  
+            chart.draw(data, options);
+          }
+
+        function drawChartT() {
+          
+          let num1;
+          let num2;
+          let num3;
+          
+          let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
+  
+            if(transacoes){
+
+              let somaTotal = transacoes.reduce((total, e) => {
+                if (e.categoria === "receita") {
+                  total.receitas += e.valor; 
+                } else if (e.categoria === "despesa") {
+                  total.despesas += e.valor; 
+                }
+                return total; 
+
+              }, { receitas: 0, despesas: 0 }); 
+              
+              let totalFinal = somaTotal.receitas - somaTotal.despesas
+
+              if(totalFinal < 0){
+                num3 = (totalFinal + (- totalFinal) * 2)
+                //console.log(num3)
+              }else {
+                num1 = totalFinal
+              }
+              
+            }
+
+            if(transacoes){
+
+              let somaRedutor = transacoes.reduce((total, e) => {
+                if(e.categoria === "despesa" && e.status === "Aberto" || e.status === "Vencido"){
+                  return total + parseFloat(e.valor); 
+                }
+              return total
+              }, 0); 
+              num2 = somaRedutor
+            }
+  
+            let data = google.visualization.arrayToDataTable([
+              ['Task', ''],
+              ['Lucro',   num1],
+              ['Pendente',   num2],
+              ['Negativo',   num3],
+              
+            ]);
+  
+            let options = {
+              title: 'Lucro/Pendente',
+              is3D: true,
+            };
+  
+            var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
+  
+            chart.draw(data, options);
+          }
+
+
+
+    </script>
+
 </head>
+
 <body>
   <div class="container">
     <!-- Menu lateral -->
     <div class="menu-lateral">
-      
-      <div>
+
+      <!-- <div>
         <p>Vizualizar:</p>
         <select name="" id="ver-usuario" class="ver-usuario">
           <option value="" placeholder="">
             Todos
-          </option>        
+          </option>
           <option value="" placeholder="">
             Luis
           </option>
@@ -25,139 +214,87 @@
             Nat
           </option>
         </select>
+      </div> -->
+      <!-- <div>
+        <select id="mes" name="mes">
+
+        </select>
+      </div> -->
+
+
+      <div class="menu-opcoes">
+
+        <ul >
+
+          <li><a href="/cadFin/">Novo Registro</a></li>
+          <li id="outros"><a >Outros</a></li>
+          <div>
+            
+            <div class="opcoes" >
+              
+              <label for="downloadJson">Download Json</label>
+              <button id="downloadJson"></button>
+      
+              <label for="uploadFile">Upload Json </label>
+              <input type="file" accept=".json" id="uploadFile"></input>
+        
+              
+            </div>
+          </div>
+           
+
+        </ul>
+
       </div>
-      <div>
-       <!-- <input type="date"> -->
-       <select id="mes" name="mes">
-        
-       </select>
-      </div>
-      <ul>
-        <li><a href="/cadFin/">Novo Registro</a></li>
-        <li><a href="#outras-opcoes">Outras Opções</a></li>
-        
-        <label for="downloadJson">Download Json</label>
-        <button id="downloadJson"></button>
-        
-        <label for="uploadFile">Upload Json </label>
-        <input type="file" accept=".json" id="uploadFile"></input>
-        
-      </ul>
+
+
+
+
     </div>
 
     <div class="ajuste-tela">
-    <div class="lista">
-      <table id="tabela">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>%</th>
-            <th>Categoria</th>
-            <th>Tipo</th>
-            <th>Status</th>
-            <th>#</th>
-          </tr>
-        </thead>
-        <tbody id="body">
-          
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Campos de Despesas, Receitas e Campo Adicional -->
-    <div class="despesas-receitas">
-      
-      <div class="organizar-campo">
-  
-        <div class="campo-receitas">
-          <div class="nav-receita">
-            <h3>Receitas</h3>
-            <select name="" id="receitaSelect">
-              <option value="fixa">Fixa</option>
-              <option value="variavel">Variável</option>
-            </select>
-          </div>
-          <div class="receitas-nav">
-            <!-- <h4>Descrição</h4>
-            <h4>Valor</h4> -->
-
-            <ul type="none">
-              <li>
-                <span>Descrição</span>
-                <span id="receitaDescricao"></span>
-              </li>
-              <li>
-                <span>Valor</span>
-                <span id="receitaValor"></span>
-              </li>
-              <li>
-                <span></span>
-                <span></span>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-
-        <div class="campo-despesas">
-          <div class="nav-despesa">
-            <h3>Despesas</h3>
-            <select name="" id="despesaSelect">
-              <option value="fixa">Fixa</option>
-              <option value="variavel">Variável</option>
-            </select>
-          </div>
-          <div class="despesas-nav">
-            <ul type="none">
-              <li>
-                <span>Descrição</span>
-                <span id="despesaDescricao"></span>
-              </li>
-              <li>
-                <span>Valor</span>
-                <span id="despesaValor"></span>
-              </li>
-              <li>
-                <span>Parcelas</span>
-                <span id="despesaParcela"></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-      <!-- Novo campo adicional -->
       <div class="campo-adicional">
         <h3>Totalizadores:</h3>
         <div class="totalizadores">
 
-          <div class="totalReceitas">
-            RECEITAS
-            <div id="receitaTotalFixa">Valor1</div>
-            <div id="receitaTotalVariavel">Valor2</div>
-            <div id="receitaTotal">Valor3</div>
-          </div>
-          <div class="totalDespesas">
-            DESPESAS
-            <div id="despesaTotalFixa">Valor1</div>
-            <div id="despesaTotalVariavel">Valor2</div>
-            <div id="despesaTotal">Valor3</div>
+          <div>
+            <div id="piechartR" style="width: 280px; height: 250px;"></div>
           </div>
 
-          <div class="lucro">
-            <p>LUCRO TOTAL</p>
-            <div id="lucro" >Valor1</div>
-            <p>Despesa/aberto</p>
-            <div id="reduzirLucro">redutor</div>
+          <div>
+            <div id="piechartD" style="width: 280px; height: 250px;"></div>
+          </div>
+
+          <div>
+            <div id="piechartT" style="width: 300px; height: 250px;"></div>
           </div>
 
 
         </div>
       </div>
+      <div class="lista">
+        
+        <table id="tabela">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>%</th>
+              <th>Categoria</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Parcelado</th>
+              <th>#</th>
+            </tr>
+          </thead>
+          <tbody id="body">
 
+          </tbody>
+        </table>
+      </div>
+
+      </div>
     </div>
-  </div>
 
   </div>
   <div id="modalEditar" class="modalOFF">
@@ -184,6 +321,13 @@
     </div>
   </div>
 
+
+
+  <script src="./script.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+
 </body>
-<script src="/script.js"></script>
+
 </html>
