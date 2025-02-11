@@ -144,22 +144,10 @@ td {
 
 #tabela th {
   background-color: #f4f4f4;
+  text-align: center;
 }
 
 
-
-.campo-despesas {
-  background-color: white;
-  padding: 20px;
-  margin-top: 10px;
-  min-height: 300px;
-  max-height: 400px;
-  width: 45%;
-  border-radius: 8px;
-  justify-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; 
-}
 
 .campo-adicional {
   background-color: white;
@@ -340,5 +328,72 @@ td {
 
   #outros {
     cursor: pointer;
+  }
+
+
+  #totalR {
+    border-bottom: #4caf4f solid 3px;
+    text-align: center;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 600;
+    padding: 4px;
+    cursor: pointer;
+    transition: .6s;
+  }
+  
+  #totalR:hover {
+    background-color: #4caf4f;
+    scale: 1.01;
+    transition: .6s;
+    color: white;
+    border-radius: 30px;
+  }
+
+  path {
+    cursor: pointer;
+  }
+
+  #totalD {
+    border-bottom: rgb(192, 4, 4) solid 3px;
+    text-align: center;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 600;
+    padding: 4px;
+    cursor: pointer;
+    transition: .6s;  
+  }
+
+  #totalD:hover {
+    background-color:rgb(192, 4, 4) ;
+    color:white;
+    scale: 1.01;
+    transition: .6s;
+    border-radius: 30px;
+  }
+
+  .pesquisa {
+    width: 100px;
+    height: 22px;
+    border: none;
+    outline: none;
+    border: black 1px solid;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .pesquisa-select {
+    width: 100px;
+    height: 22px;
+    border: none;
+    outline: none;
+    border: black 1px solid;
+    padding: 1px;
+    background-color: white;
+    text-align: center;
+    border-radius: 10px;
   }
 

@@ -55,11 +55,12 @@
             num3 = somaReceitas
           }
 
+          document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3}`
+
           let data = google.visualization.arrayToDataTable([
             ['Task', ''],
             ['Fixa',   num1],
             ['Variavel',   num2],
-            ['Total',  num3],
             
           ]);
 
@@ -111,12 +112,13 @@
 
               num3 = somaDespesas
             }
+
+            document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3}`
   
             let data = google.visualization.arrayToDataTable([
               ['Task', ''],
               ['Fixa',   num1],
               ['Variavel',   num2],
-              ['Total',  num3],
               
             ]);
   
@@ -175,7 +177,7 @@
             let data = google.visualization.arrayToDataTable([
               ['Task', ''],
               ['Lucro',   num1],
-              ['Pendente',   num2],
+              ['Pendente',   num2 ],
               ['Negativo',   num3],
               
             ]);
@@ -258,15 +260,17 @@
         <div class="totalizadores">
 
           <div>
-            <div id="piechartR" style="width: 280px; height: 250px;"></div>
+            <div id="piechartR" style="width: 280px; height: 200px;"></div>
+            <div id="totalR"></div>
           </div>
 
           <div>
-            <div id="piechartD" style="width: 280px; height: 250px;"></div>
+            <div id="piechartD" style="width: 280px; height: 200px;"></div>
+            <div id="totalD"></div>
           </div>
 
           <div>
-            <div id="piechartT" style="width: 300px; height: 250px;"></div>
+            <div id="piechartT" style="width: 300px; height: 200px;"></div>
           </div>
 
 
@@ -285,6 +289,36 @@
               <th>Status</th>
               <th>Parcelado</th>
               <th>#</th>
+
+            </tr>
+            <tr>
+              <td>
+                <input type="text" class="pesquisa">
+              </td>
+              <td>
+                <input type="text" class="pesquisa">
+              </td>              
+              <td>
+                <input type="text" class="pesquisa">
+              </td>              
+              <td>
+                <select id="pesquisaSelect" class="pesquisa-select">
+                  <option value=""></option>
+                  <option value="receita">Receita</option>
+                  <option value="despesa">Despesa</option>
+                </select>
+              </td>              
+              <td>
+                <input type="text" class="pesquisa">
+              </td>              
+              <td>
+                <input type="text" class="pesquisa">
+              </td>              
+              <td>
+                <input type="text" class="pesquisa">
+              </td>              
+              <td>
+              </td>
             </tr>
           </thead>
           <tbody id="body">

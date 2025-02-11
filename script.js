@@ -29,9 +29,9 @@ function carregarTransacoes() {
       }, 0); 
 
       
-      let porcentagemR = ((transacao.valor/somaReceitas) * 100).toFixed(0)
+      let porcentagemR = ((transacao.valor/somaReceitas) * 100).toFixed(1)
 
-      let porcentagemD = ((transacao.valor/somaDespesas) * 100).toFixed(0)
+      let porcentagemD = ((transacao.valor/somaDespesas) * 100).toFixed(1)
       
 
 
@@ -52,7 +52,7 @@ function carregarTransacoes() {
         <td>${transacao.tipo}</td>
         <td style="color:green; font-weight:bold; ">${transacao.status}</td>
         <td style=" font-weight:bold; text-align:center;">Sem parcela</td>
-        <td><span class="delete-btn" onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit"></i></span></td>
+        <td><span onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit" style="margin-left:20px;"></i></span></td>
       </tr> 
       `;
 
@@ -73,13 +73,13 @@ function carregarTransacoes() {
         <td>${transacao.categoria}</td>
         <td>${transacao.tipo}</td>
         <td style="color: ${
-            transacao.status === 'Quitado' ? 'blue' :
+            transacao.status === 'Quitado' ? 'darkcyan' :
             transacao.status === 'Aberto' ? 'darkorange' :
             transacao.status === 'Vencido' ? 'red' :
             'inherit'
         }; font-weight: bold; ">${transacao.status}</td>
         <td style="font-weight:bold; text-align:center;">${transacao.parcela}x</td>  
-        <td><span class="delete-btn" onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit"></i></span></td>
+        <td><span onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit" style="margin-left:20px;"></i></span></td>
       </tr> 
       `;
 
@@ -152,24 +152,6 @@ function editarTransacao(i) {
 
 }
   
-
-// function exibeLucro(){
-
-//   let receitaTotal = document.getElementById("receitaTotal").innerText
-//   let filtrarReceita = Number(receitaTotal.replace(/[^\d.]/g, ""))
-
-//   let despesaTotal = document.getElementById("despesaTotal").innerText
-//   let filtrarDespesa = Number(despesaTotal.replace(/[^\d.]/g, ""))
-
-//   // console.log(despesaTotal, filtrarDespesa, filtrarReceita)
-
-//   let somaTotal = filtrarReceita + (-filtrarDespesa)
-
-//   let total = document.getElementById("lucro")
-//     total.innerHTML = `R$: ${somaTotal}`
-
-// }
-
   
 
 
