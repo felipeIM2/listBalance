@@ -95,7 +95,7 @@ text {
   background-color: white;
   margin-top: 5px;
   min-height: 50%;
-  max-height: 100%;
+  max-height: 60%;
   margin-left: auto;
   margin-right: auto;
   justify-items: center;
@@ -122,7 +122,7 @@ text {
 
 #tabela {
   border-collapse: collapse;
-  width: 90%;
+  width: 95%;
   font-family: "Montserrat", serif;
 }
 
@@ -137,7 +137,6 @@ td {
 #tabela th, #tabela td {
   padding: 10px;
   border: 1px solid #ddd;
-  text-align: left;
   font-family: "Montserrat", serif;
   font-weight: 600;
 }
@@ -272,16 +271,15 @@ td {
       background-color: #45a049;
   }
 
-  i {
+    i {
       transition: .2s;
-  }
+      cursor: pointer;
+      scale: 1.2;
+    }
 
-  i:hover {
-    
-      scale: 1.1;
-      transition: .2s;
-  }
-
+    td {
+      text-align: center;
+    }
 
   .ajuste-tela {
     display: flex;
@@ -356,7 +354,7 @@ td {
   }
 
   #totalD {
-    border-bottom: rgb(192, 4, 4) solid 3px;
+    border-bottom: rgb(175, 3, 3) solid 3px;
     text-align: center;
     width: 200px;
     margin-left: auto;
@@ -368,7 +366,7 @@ td {
   }
 
   #totalD:hover {
-    background-color:rgb(192, 4, 4) ;
+    background-color:rgb(175, 3, 3) ;
     color:white;
     scale: 1.01;
     transition: .6s;
@@ -380,20 +378,78 @@ td {
     height: 22px;
     border: none;
     outline: none;
-    border: black 1px solid;
+    border: #d6d6d6 1px solid;
     padding: 1px 7px;
     border-radius: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   }
+
+
 
   .pesquisa-select {
     width: 100px;
     height: 22px;
     border: none;
     outline: none;
-    border: black 1px solid;
+    border: #d6d6d6 1px solid;
     padding: 1px;
     background-color: white;
     text-align: center;
     border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
   }
 
+  #totalN {
+    border-bottom: rgb(247, 190, 6) solid 3px;
+    text-align: center;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 600;
+    padding: 4px;
+    cursor: pointer;
+    transition: .6s;  
+  }
+
+  #totalN:hover {
+    background-color:rgb(247, 190, 6) ;
+    color:white;
+    scale: 1.01;
+    transition: .6s;
+    border-radius: 30px;
+  }
+
+
+  .pesquisa-container {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+
+  .pesquisa-containerOn {
+    opacity: 1;
+    transition: opacity .6s;
+  }
+
+  .pesquisa-containerOn input {
+    width: 100px;
+  }
+
+  .pesquisa-containerOn select {
+    width: 100px;
+  }
+
+  #limpar {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+    transition: .4s;
+    cursor: pointer;
+  }
