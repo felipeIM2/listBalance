@@ -8,7 +8,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Montserrat", serif;
-  
+ 
 }
 
 body {
@@ -347,6 +347,7 @@ td {
     transition: .6s;
     color: white;
     border-radius: 30px;
+    font-weight: 700;
   }
 
   path {
@@ -363,6 +364,7 @@ td {
     padding: 4px;
     cursor: pointer;
     transition: .6s;  
+    
   }
 
   #totalD:hover {
@@ -371,6 +373,7 @@ td {
     scale: 1.01;
     transition: .6s;
     border-radius: 30px;
+    font-weight: 700;
   }
 
   .pesquisa {
@@ -398,9 +401,7 @@ td {
     text-align: center;
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    -webkit-appearance: none; 
-    -moz-appearance: none;
-    appearance: none;
+  
   }
 
   #totalN {
@@ -421,19 +422,33 @@ td {
     scale: 1.01;
     transition: .6s;
     border-radius: 30px;
+    font-weight: 700;
   }
 
 
   .pesquisa-container {
     display: none;
     opacity: 0;
-    transition: all 0.3s ease-in-out;
+  }
+
+  @keyframes piscar2 {
+    0% {
+      opacity: 0;
+      display: none;
+    }
+    60% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 2;
+    }
   }
 
 
   .pesquisa-containerOn {
-    opacity: 1;
-    transition: opacity .6s;
+    
+    transition: width .6s;
+    animation: piscar2 1s ease-in; 
   }
 
   .pesquisa-containerOn input {
@@ -453,3 +468,23 @@ td {
     transition: .4s;
     cursor: pointer;
   }
+
+  @keyframes piscar {
+    0% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .alertaPesquisaOff { display: none; }
+  .alertaPesquisaOn {
+    display:flex; 
+    margin-top:40px;
+    font-weight: bolder;
+    animation: piscar 4s infinite ;
+  } 

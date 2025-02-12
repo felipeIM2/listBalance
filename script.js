@@ -17,8 +17,8 @@
         
       transacoesFiltradas = transacoes.filter((transacao) => {
       
-        if(recParcelado.includes("sem parcela")){
-          recParcelado = "0"
+        if(recParcelado.includes("0")){
+          recParcelado = "sem parcela"
         }
 
         let descricaoMatch = transacao.descricao.toLowerCase().includes(recDescricao);
@@ -26,13 +26,17 @@
         let statusMatch = transacao.status.toLowerCase().includes(recStatus);
         let categoriaMatch = transacao.categoria.toLowerCase().includes(recCategoria);
         let tipoMatch = transacao.tipo.toLowerCase().includes(recTipo);
-        let parcelaMatch = (recParcelado === "0" && transacao.parcela === 0) || transacao.parcela.toString().includes(recParcelado);
+        let parcelaMatch = transacao.parcela.toString().toLowerCase().includes(recParcelado);
 
         return descricaoMatch && valorMatch && statusMatch && categoriaMatch && tipoMatch && parcelaMatch;
       });
 
 
-
+        if(transacoesFiltradas.length === 0){
+          document.getElementById("alertaPesquisa").setAttribute("class", "alertaPesquisaOn")
+        }else {
+          document.getElementById("alertaPesquisa").setAttribute("class", "alertaPesquisaOff")
+        }
       renderizarTabela(transacoesFiltradas);
     }
 
@@ -272,17 +276,17 @@
 
     let filtro = document.querySelectorAll(".pesquisa-containerOn")
 
+      filtro.forEach(e => {
+        e.className = "pesquisa-container"
+      });
+
+    }
+
     filtro.forEach(e => {
-      e.className = "pesquisa-container"
-    });
-
-  }
-
-  filtro.forEach(e => {
-    
-    if(e.className === "pesquisa-container"){
-      e.className = "pesquisa-containerOn"
-    } 
+      
+      if(e.className === "pesquisa-container"){
+        e.className = "pesquisa-containerOn"
+      } 
 
   });
     

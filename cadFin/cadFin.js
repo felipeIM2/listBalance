@@ -39,7 +39,7 @@ document.getElementById("adicionar").addEventListener("click", () =>{
   if(categoria === "receita"){
 
     status = "Entrada"
-    parcela = 0
+    parcela = "Sem parcela"
 
   } else if(categoria === "despesa"){
 
@@ -47,7 +47,7 @@ document.getElementById("adicionar").addEventListener("click", () =>{
     parcela =  parseFloat(document.getElementById("parcelado").value)
 
     if(tipo === "fixa") { 
-      parcela = 1
+      parcela = "1"
     }
     
   }
