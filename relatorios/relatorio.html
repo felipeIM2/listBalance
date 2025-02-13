@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planilha
+
+  </title>
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="./relatorios.js"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <!-- Menu lateral -->
+    <div class="menu-lateral">
+
+      <!-- <div>
+        <p>Vizualizar:</p>
+        <select name="" id="ver-usuario" class="ver-usuario">
+          <option value="" placeholder="">
+            Todos
+          </option>
+          <option value="" placeholder="">
+            Luis
+          </option>
+          <option value="" placeholder="">
+            Nat
+          </option>
+        </select>
+      </div> -->
+      <!-- <div>
+        <select id="mes" name="mes">
+
+        </select>
+      </div> -->
+
+
+      <div class="menu-opcoes">
+
+        <ul>
+          <li><a href="../cadFin/">Novo Registro</a></li>
+          <li><a href="../relatorios/relatorio.html">Relatórios</a></li>
+          <li><a href="../">Voltar</a></li>
+          <div>
+
+            <div class="opcoes">
+
+              <label for="downloadJson">Download Json</label>
+              <button id="downloadJson"></button>
+
+              <label for="uploadFile">Upload Json </label>
+              <input type="file" accept=".json" id="uploadFile"></input>
+
+
+            </div>
+          </div>
+
+
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div class="ajuste-tela">
+      <div class="tela">
+
+        <div class="graficos">
+
+          <div id="table_div" style="width: 40%; max-height: 350px; font-weight: bolder; text-align:center;"></div>
+          <div id="piechartA" style="width: 50%; height: 350px; color: black;"></div>
+          
+        </div>
+          <div id="linechart_material" style="margin-top: 40px;"></div>
+      </div>
+    </div>
+
+
+
+
+
+    <script src="./relatorios.js"></script>
+    
+</body>
+
+</html>

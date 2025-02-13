@@ -177,7 +177,7 @@ td {
     background-color: rgba(2, 113, 146, 0.973);
     padding: 20px;
     border-radius: 20px;
-    width: 900px;
+    width: 80%;
     height: 600px;
     top: 50%;                 
     left: 50%;                 
@@ -190,9 +190,7 @@ td {
 }
 
 .editarFormulario {
-    display: flex;
-    flex-direction: column;
-    /* gap: 20px; */
+
     padding: 20px;
     width: 400px;
     margin-left: auto;
@@ -211,6 +209,8 @@ td {
     text-align: center;
     transition: .4s;
 }
+
+
 
 .fecharModalEdicao{
   background-color: transparent;

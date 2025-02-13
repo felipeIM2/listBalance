@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Lexend:wght@100..900&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+* {
+ 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", serif;
+ 
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  background-color: rgb(0, 56, 73);
+}
+
+text {
+  font-family: "Montserrat", serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  
+}
+
+
+/* Menu Lateral */
+.menu-lateral {
+  background-color: rgb(0, 68, 88);
+  width: 200px;
+  color: white;
+  padding: 10px;
+  min-height: 100%;
+  max-height: 150%;
+}
+
+
+.menu-lateral p {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.menu-lateral select {
+  display: flex;
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 80px;
+  text-align: center;
+  border: none;
+  color: white;
+  background-color: rgb(0, 68, 88);
+  cursor: pointer;
+}
+
+.menu-lateral ul {
+  margin-top: 25px;
+  list-style: none;
+  text-align: center;
+  
+}
+.menu-lateral ul li:hover {
+  transition: .5s;
+  border-bottom: #ddd 1px solid;
+}
+
+.menu-lateral ul li {
+  margin-bottom: 25px;
+  border: rgb(0, 68, 88) 1px solid;
+  transition: .5s;
+}
+
+.menu-lateral ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.menu-opcoes {
+  margin-top: 100%; 
+}
+
+
+
+.lista {
+  width: 95%;
+  background-color: white;
+  margin-top: 5px;
+  min-height: 50%;
+  max-height: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  font-family: "Montserrat", serif;
+}
+
+.lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lista::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+} 
+
+.lista::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+} 
+
+
+#tabela {
+  border-collapse: collapse;
+  width: 95%;
+  font-family: "Montserrat", serif;
+}
+
+th {
+  width: 100px;
+}
+td {
+  width: 100px;
+  font-size: 13px;
+}
+
+#tabela th, #tabela td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+}
+
+#tabela th {
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+
+
+.tela {
+  background-color: white;
+  margin-top: 20px;
+  width:  95%;
+
+  border-radius: 8px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+} 
+
+
+  button {
+      cursor: pointer;
+      font-weight: bold;
+  }
+
+  #excluirRegistro {
+      background-color: #f44336;
+      color: white;
+      border: none;
+  }
+
+  #salvarEdicao {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+  }
+
+  #excluirRegistro:hover {
+      background-color: #d32f2f;
+  }
+
+  #salvarEdicao:hover {
+      background-color: #45a049;
+  }
+
+    i {
+      transition: .2s;
+      cursor: pointer;
+      scale: 1.2;
+    }
+
+    td {
+      text-align: center;
+    }
+
+  .ajuste-tela {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    /* background-color: yellow; */
+  }
+
+  #downloadJson {
+    opacity: 0;
+  }
+
+
+  .menu-lateral label {
+      display: inline-block;
+      /* background-color: #4CAF50; */
+      /* color: white; */
+      /* padding: 10px 0px; */
+      border: none;
+      /* border-radius: 5px; */
+      cursor: pointer;
+      margin-bottom: 20px;
+      border-bottom: solid 1px transparent;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+.menu-lateral label:hover {
+    border-bottom: solid 1px white;
+    transition: .4s;
+    
+  }
+
+  input[type="file"] {
+    display: none; /* Esconde o botão original */
+  }
+
+
+  .opcoes {
+    display: none;
+    opacity: 0;
+  }
+
+  #outros {
+    cursor: pointer;
+  }
+
+
+.graficos {
+  display: flex;
+  justify-content: center;
+}
+
+.graficos div {
+  width: 0px;
+}
+
+

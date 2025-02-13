@@ -276,7 +276,8 @@
 
   document.getElementById('downloadJson').addEventListener('click', function() {
 
-    let data = JSON.stringify(localStorage.getItem("transacoes"))
+    let data = localStorage.getItem("transacoes")
+      console.log(data)
       const blob = new Blob([data], { type: 'application/json' });
 
       const link = document.createElement('a');
