@@ -342,7 +342,7 @@ td {
   }
   
   #totalR:hover {
-    background-color: #4caf4f;
+    background-color: rgb(76,175,79, 0.8);
     scale: 1.01;
     transition: .6s;
     color: white;
@@ -368,7 +368,7 @@ td {
   }
 
   #totalD:hover {
-    background-color:rgb(175, 3, 3) ;
+    background-color:rgb(175, 3, 3, 0.8) ;
     color:white;
     scale: 1.01;
     transition: .6s;
@@ -417,7 +417,7 @@ td {
   }
 
   #totalN:hover {
-    background-color:rgb(247, 190, 6) ;
+    background-color:rgb(247, 190, 6, 0.8) ;
     color:white;
     scale: 1.01;
     transition: .6s;

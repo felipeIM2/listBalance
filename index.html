@@ -176,7 +176,8 @@
               num2 = somaRedutor
             }
 
-              if(transacoes){
+            if(transacoes){
+              
               let somaReceitas = transacoes.reduce((total, e) => {
                 if(e.categoria === "receita"){
                   return total + parseFloat(e.valor); 

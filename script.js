@@ -136,43 +136,46 @@
   }
   carregarTransacoes();
 
-  function editarTransacao(i) {
+  
+  
+  
+ function editarTransacao(i) {
 
     const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
         
-    transacoes.forEach(element => {
+      transacoes.forEach(element => {
 
-      let optAtual = document.getElementById("optAtual");
-      let selectStatus = document.getElementById("selectStatus");
-      let nomeCelula = document.getElementById("nomeCelula");
-      let valorCelula = document.getElementById("valorCelula");
-      let tipoCelula = document.getElementById("tipoCelula");
+        let optAtual = document.getElementById("optAtual");
+        let selectStatus = document.getElementById("selectStatus");
+        let nomeCelula = document.getElementById("nomeCelula");
+        let valorCelula = document.getElementById("valorCelula");
+        let tipoCelula = document.getElementById("tipoCelula");
 
-      if (element.id === i) {
-          
-          let valorFormatado = `${(element.valor).toFixed(2).replace(".", ",")}`;
+        if (element.id === i) {
+            
+            let valorFormatado = `${(element.valor).toFixed(2).replace(".", ",")}`;
 
-          if (element.status === "Entrada" || element.status === "Quitado") {
-              selectStatus.setAttribute("disabled", "true");
+            if (element.status === "Entrada" || element.status === "Quitado") {
+                selectStatus.setAttribute("disabled", "true");
 
-              optAtual.innerText = element.status;
-              optAtual.value = element.status;
-              nomeCelula.value = element.descricao;
-              valorCelula.value = valorFormatado;  // Aplica o valor formatado
-              valorCelula.innerText = valorFormatado;  // Aplica o valor formatado também
-              tipoCelula.value = element.categoria;
-          } else {
-              selectStatus.removeAttribute("disabled");
+                optAtual.innerText = element.status;
+                optAtual.value = element.status;
+                nomeCelula.value = element.descricao;
+                valorCelula.value = valorFormatado;  // Aplica o valor formatado
+                valorCelula.innerText = valorFormatado;  // Aplica o valor formatado também
+                tipoCelula.value = element.categoria;
+            } else {
+                selectStatus.removeAttribute("disabled");
 
-              optAtual.innerText = element.status;
-              optAtual.value = element.status;
-              nomeCelula.value = element.descricao;
-              valorCelula.value = valorFormatado;  // Aplica o valor formatado
-              valorCelula.innerText = valorFormatado;  // Aplica o valor formatado também
-              tipoCelula.value = element.categoria;
-          }
-      }
-  });
+                optAtual.innerText = element.status;
+                optAtual.value = element.status;
+                nomeCelula.value = element.descricao;
+                valorCelula.value = valorFormatado;  // Aplica o valor formatado
+                valorCelula.innerText = valorFormatado;  // Aplica o valor formatado também
+                tipoCelula.value = element.categoria;
+            }
+        }
+    });
 
         document.getElementById("excluirRegistro").addEventListener("click", () => {
 
@@ -191,15 +194,85 @@
           }, 500);
 
         })
+
+        document.getElementById("salvarEdicao").addEventListener("click", () => { 
+          
+          let index = transacoes.findIndex(transacao => transacao.id === i)
+
+          if(index !== -1){
+            let status = document.getElementById("selectStatus").value
+            let valor = document.getElementById("valorCelula").value.replace(",", ".")
+           
+            transacoes[index] = {
+              ...transacoes[index], 
+              status: String(status),  
+              valor: Number(valor)     
+            }
+
+            setTimeout(() => {
+              localStorage.setItem('transacoes', JSON.stringify(transacoes));
+              setTimeout(() => {
+                location.reload()
+              }, 600);
+            }, 600);
+
+          }
+
+        })
         
 
         document.getElementById("modalEditar").setAttribute("class", "modalEditarON") 
 
   }
+
   
   document.getElementById("fecharModalEdicao").addEventListener("click", () => {
     document.getElementById("modalEditar").setAttribute("class", "modalOFF") 
   })
+
+  document.getElementById("outros").addEventListener("click", () => {
+
+     let item = document.querySelector(".opcoes")
+     let estilos = window.getComputedStyle(item)
+     let display = estilos.getPropertyValue("display")
+     console.log("")
+
+     if(display === "none"){
+
+      item.style.cssText = "display:block; opacity:0; transition:.4s;"
+      setTimeout(() => {
+         item.style.cssText = "display:block; opacity:1; transition:.4s;"
+      }, 200);
+
+     }else {
+        item.style.cssText = "display:block; opacity:0; transition:.4s;"
+        setTimeout(() => {
+          item.style.cssText = "display:none; opacity:0; transition:.4s;"
+       }, 200);
+     }
+    
+
+     
+  })
+
+  document.getElementById("filtro").addEventListener("click", () => {
+    let filtro = document.querySelectorAll(".pesquisa-container")
+  if(filtro.length === 0 ){
+    let filtro = document.querySelectorAll(".pesquisa-containerOn")
+      filtro.forEach(e => {
+        e.className = "pesquisa-container"
+      });
+
+    }
+    filtro.forEach(e => {
+      
+      if(e.className === "pesquisa-container"){
+        e.className = "pesquisa-containerOn"
+      } 
+   });
+    
+  })
+
 
   document.getElementById('downloadJson').addEventListener('click', function() {
 
@@ -243,57 +316,8 @@
     }
   });
 
-  document.getElementById("outros").addEventListener("click", () => {
-
-     let item = document.querySelector(".opcoes")
-     let estilos = window.getComputedStyle(item)
-     let display = estilos.getPropertyValue("display")
-     console.log("")
-
-     if(display === "none"){
-
-      item.style.cssText = "display:block; opacity:0; transition:.4s;"
-      setTimeout(() => {
-         item.style.cssText = "display:block; opacity:1; transition:.4s;"
-      }, 200);
-
-     }else {
-        item.style.cssText = "display:block; opacity:0; transition:.4s;"
-        setTimeout(() => {
-          item.style.cssText = "display:none; opacity:0; transition:.4s;"
-       }, 200);
-     }
-    
-
-     
-  })
-
-  document.getElementById("filtro").addEventListener("click", () => {
-    
-    let filtro = document.querySelectorAll(".pesquisa-container")
-
-  if(filtro.length === 0 ){
-
-    let filtro = document.querySelectorAll(".pesquisa-containerOn")
-
-      filtro.forEach(e => {
-        e.className = "pesquisa-container"
-      });
-
-    }
-
-    filtro.forEach(e => {
-      
-      if(e.className === "pesquisa-container"){
-        e.className = "pesquisa-containerOn"
-      } 
-
-  });
-    
-  })
 
 
 
 
-
-
+ 
