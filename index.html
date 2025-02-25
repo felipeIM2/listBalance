@@ -242,10 +242,10 @@
 
       <div class="menu-opcoes">
 
-        <ul >
+        <ul > 
 
           <li><a href="./cadFin/">Novo Registro</a></li>
-          <!-- <li><a href="./relatorios/relatorio.html">Relatórios</a></li> -->
+          <li><a>Filtro Avançado</a></li>
           <li id="outros"><a >Outros</a></li>
           <div>
             
@@ -272,6 +272,24 @@
     </div>
 
     <div class="ajuste-tela">
+      
+      <div id="modalFiltro" class="modalFiltro">
+
+        <div style="display: flex; margin-bottom: 75%;">
+          <select name="mes" id="selectMes">
+            <option value="">Selecionar mes</option>
+          </select>
+          <select name="pessoa" id="selectPessoa">
+            <option value="">Selecionar pessoa</option>
+          </select>
+        </div>
+         <div class="modalButton">
+           <button>Voltar</button>
+          <button id="aplicarFiltro">Aplicar</button>
+         </div>
+
+      </div>
+
       <div class="campo-adicional">
         <h3>Totalizadores:</h3>
         <div class="totalizadores">
@@ -295,7 +313,7 @@
         </div>
       </div>
       <div class="lista">
-        
+
         <table id="tabela">
           <thead>
             <tr>
@@ -399,7 +417,7 @@
 
 
 
-  <script src="./script.js"></script>
+  <script src="./script.js" type="module"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 

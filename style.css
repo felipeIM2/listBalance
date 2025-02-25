@@ -87,7 +87,9 @@ text {
 .menu-opcoes {
   margin-top: 100%; 
 }
-
+.menu-opcoes li{
+  cursor: pointer;
+}
 
 
 .lista {
@@ -488,3 +490,42 @@ td {
     font-weight: bolder;
     animation: piscar 4s infinite ;
   } 
+
+
+  .modalFiltro {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(155, 153, 153, 0.767);
+    width: 400px;
+    height: 400px;
+    left: 40%;
+    top: 20%;
+    z-index: 20;
+    border-radius: 20px;
+    
+   
+  }
+
+  .modalFiltro select {
+    display: flex;
+    width: 150px;
+    height: 30px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .modalButton {
+    display: flex;
+  }
+  .modalButton button {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+  }

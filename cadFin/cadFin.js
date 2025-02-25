@@ -36,19 +36,24 @@ document.getElementById("adicionar").addEventListener("click", () =>{
   let vencimento;
 
   if(check.checked === true) {
-    let vencimentoData = document.getElementById("data").value
-    const [ano, mes, dia] = vencimentoData.split('-').map(Number);
 
+    let vencimentoData = document.getElementById("data").value
+    let [ano, mes, dia] = vencimentoData.split('-').map(Number);
+      
    
     if(!dia, !mes, ano < anoHoje){
       return alert("Favor inserir as informações do campo Vencimento corretamente!")
     }else {
+      if(mes < 10){ mes = `0${mes}` }
+      if(dia < 10){ dia = `0${dia}` }
+
+      // console.log(mes, dia)
      vencimento = `${dia}/${mes}/${ano}`;
     }
   }else {
     vencimento = "Sem Vencimento"
   }
-  
+  // console.log(vencimento)
 
   
 
@@ -84,15 +89,16 @@ document.getElementById("adicionar").addEventListener("click", () =>{
 
    
    transacoes.push({ id, descricao, valor, categoria, tipo, pessoa, parcela, mesHoje, vencimento, status});
-   console.log(transacoes)
-  // localStorage.setItem('transacoes', JSON.stringify(transacoes));
+  //  console.log(transacoes)
+   localStorage.setItem('transacoes', JSON.stringify(transacoes));
 
   document.getElementById('descricao').value = '';
   document.getElementById('valor').value = '';
+  document.getElementById('data').value = '';
 
 })
 
-document.getElementById("cancelar").addEventListener("click", () => location.href = "../index.html")
+document.getElementById("cancelar").addEventListener("click", () => location = "../index.html")
 
 const parcelado = document.getElementById("parcelado");
 
@@ -145,3 +151,6 @@ document.getElementById("checkData").addEventListener("click", () => {
     document.getElementById("data").setAttribute("disabled", "true")
   }
 })
+
+
+

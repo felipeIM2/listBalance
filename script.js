@@ -1,4 +1,9 @@
- 
+
+
+import usuarios from '../usuario.js'
+
+
+
 
   function carregarTransacoes() {
     const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
@@ -28,7 +33,7 @@
         let categoriaMatch = transacao.categoria.toLowerCase().includes(recCategoria);
         let tipoMatch = transacao.tipo.toLowerCase().includes(recTipo);
         let parcelaMatch = transacao.parcela.toString().toLowerCase().includes(recParcelado);
-        let vencimentoMatch = transacao.parcela.toString().toLowerCase().includes(recVencimento);
+        let vencimentoMatch = transacao.vencimento.toString().toLowerCase().includes(recVencimento);
 
         return descricaoMatch && valorMatch && statusMatch && categoriaMatch && tipoMatch && parcelaMatch && vencimentoMatch;
       });
@@ -327,5 +332,71 @@
   const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
   const diaHoje = String(hoje.getDate()).padStart(2, '0');        
   const anoHoje = hoje.getFullYear()
-
+   let validadorDataHoje = parseInt(mesHoje)+parseInt(diaHoje)+parseInt(anoHoje)
+   
  
+  const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+  let validadorDataVencimento;
+
+    function validaVencimento(){
+      transacoes.forEach(e => {
+       
+        if (e.vencimento != "Sem Vencimento" && e.status === "Aberto") { 
+
+          const vencimentoSemBarras = e.vencimento.replace(/\//g, '');  
+          const dia = parseInt(vencimentoSemBarras.substring(0, 2)); 
+          const mes = parseInt(vencimentoSemBarras.substring(2, 4)); 
+          const ano = parseInt(vencimentoSemBarras.substring(4, 8));  
+          validadorDataVencimento = dia + mes + ano;
+
+         if(validadorDataVencimento < validadorDataHoje){
+            e.status = "Vencido"
+            localStorage.setItem('transacoes', JSON.stringify(transacoes));
+          
+         }
+
+        }
+      });
+    }
+ validaVencimento()
+
+
+ function exibePessoa() {
+  let pessoa =  document.getElementById("selectPessoa")
+   usuarios.forEach(element => {
+     let opt = document.createElement("option")
+     opt.innerText = element.nome
+ 
+     pessoa.appendChild(opt)
+   });
+ }
+ exibePessoa()
+
+
+ function exibeMes() {
+  let mes =  document.getElementById("selectMes")
+  const meses = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
+  meses.forEach((mes1, index) => {
+    let option = document.createElement("option");
+    option.value = index + 1; 
+    option.textContent = mes1; 
+    mes.appendChild(option); 
+  });
+
+ }
+exibeMes()
+
+
+
+
+
+document.getElementById("aplicarFiltro").addEventListener("click", () => {
+  let mes = document.getElementById("selectMes").value
+  let pessoa = document.getElementById("selectPessoa").value
+  console.log(mes, pessoa)
+})
+
