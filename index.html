@@ -245,7 +245,7 @@
         <ul >
 
           <li><a href="./cadFin/">Novo Registro</a></li>
-          <li><a href="./relatorios/relatorio.html">Relatórios</a></li>
+          <!-- <li><a href="./relatorios/relatorio.html">Relatórios</a></li> -->
           <li id="outros"><a >Outros</a></li>
           <div>
             
@@ -299,7 +299,6 @@
         <table id="tabela">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Descrição</th>
               <th>Valor</th>
               <th>%</th>
@@ -307,14 +306,12 @@
               <th>Tipo</th>
               <th>Status</th>
               <th>Parcelado</th>
+              <th>Vencimento</th>
               <th><i class="fa fa-filter" id="filtro"></i></th>
 
             </tr>
             <tr>
 
-              <td class="pesquisa-container" >
-                ----
-              </td> 
 
               <td class="pesquisa-container" >
                 <input type="text" class="pesquisa" id="descricao" autocomplete="off">
@@ -353,6 +350,10 @@
               </td>  
 
               <td class="pesquisa-container">
+                <input type="text" class="pesquisa" id="vencimento" autocomplete="off">
+              </td>  
+
+              <td class="pesquisa-container">
                 <i class="fa fa-eraser" id="limpar"></i>
               </td>
 
@@ -372,7 +373,7 @@
     </div>
 
   </div>
-  <div id="modalEditar" class="modalEditarON">
+  <div id="modalEditar" class="modalOFF">
     <button class="fecharModalEdicao" id="fecharModalEdicao"> Sair </button>
     <div class="editarFormulario">
 

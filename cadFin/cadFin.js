@@ -29,7 +29,29 @@ document.getElementById("adicionar").addEventListener("click", () =>{
   let pessoa =  document.getElementById("pessoa").value
 
   const hoje = new Date(); 
-  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');
+  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+  const anoHoje = hoje.getFullYear() 
+
+  let check = document.getElementById("checkData")
+  let vencimento;
+
+  if(check.checked === true) {
+    let vencimentoData = document.getElementById("data").value
+    const [ano, mes, dia] = vencimentoData.split('-').map(Number);
+
+   
+    if(!dia, !mes, ano < anoHoje){
+      return alert("Favor inserir as informações do campo Vencimento corretamente!")
+    }else {
+     vencimento = `${dia}/${mes}/${ano}`;
+    }
+  }else {
+    vencimento = "Sem Vencimento"
+  }
+  
+
+  
+
   
   const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
 
@@ -60,10 +82,10 @@ document.getElementById("adicionar").addEventListener("click", () =>{
     id = ultimoID + 1
   }
 
-  
-   transacoes.push({ id, descricao, valor, categoria, tipo, pessoa, parcela, mesHoje, status});
+   
+   transacoes.push({ id, descricao, valor, categoria, tipo, pessoa, parcela, mesHoje, vencimento, status});
    console.log(transacoes)
-   localStorage.setItem('transacoes', JSON.stringify(transacoes));
+  // localStorage.setItem('transacoes', JSON.stringify(transacoes));
 
   document.getElementById('descricao').value = '';
   document.getElementById('valor').value = '';
@@ -86,6 +108,17 @@ const tipoSelect = document.getElementById("tipo");
 
 categoriaSelect.addEventListener("change", function() {
   liberarParcelas()
+  if(categoriaSelect.value === "despesa") {
+    
+    document.getElementById("dataForm").style.cssText = "display:flex;"
+    document.getElementById("checkData").checked = true
+
+    
+  }else {
+   
+    document.getElementById("dataForm").style.cssText = "display:none;"
+    
+  }
 });
 
 tipoSelect.addEventListener("change", function() {
@@ -99,3 +132,16 @@ function liberarParcelas() {
      parcelado.setAttribute("disabled", "true")
    }
 }
+
+
+
+document.getElementById("checkData").addEventListener("click", () => {
+  let check = document.getElementById("checkData")
+
+  if(check.checked === true) {
+    document.getElementById("data").removeAttribute("disabled")
+  }else if(check.checked === false) {
+    document.getElementById("data").value = "0000-00-00"
+    document.getElementById("data").setAttribute("disabled", "true")
+  }
+})

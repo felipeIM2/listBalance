@@ -14,6 +14,7 @@
       let recCategoria = document.getElementById('categoria').value.toLowerCase();
       let recTipo = document.getElementById('tipo').value.toLowerCase();
       let recParcelado = document.getElementById('parcelado').value.toLowerCase();
+      let recVencimento = document.getElementById('vencimento').value.toLowerCase();
         
       transacoesFiltradas = transacoes.filter((transacao) => {
       
@@ -27,8 +28,9 @@
         let categoriaMatch = transacao.categoria.toLowerCase().includes(recCategoria);
         let tipoMatch = transacao.tipo.toLowerCase().includes(recTipo);
         let parcelaMatch = transacao.parcela.toString().toLowerCase().includes(recParcelado);
+        let vencimentoMatch = transacao.parcela.toString().toLowerCase().includes(recVencimento);
 
-        return descricaoMatch && valorMatch && statusMatch && categoriaMatch && tipoMatch && parcelaMatch;
+        return descricaoMatch && valorMatch && statusMatch && categoriaMatch && tipoMatch && parcelaMatch && vencimentoMatch;
       });
 
 
@@ -48,6 +50,7 @@
       document.getElementById('categoria').value = ''
       document.getElementById('tipo').value = ''
       document.getElementById('parcelado').value = ''
+      document.getElementById('vencimento').value = ''
 
       aplicarFiltros()
 
@@ -77,6 +80,7 @@
         }, 0); 
 
         let somaDespesas = transacoes.reduce((total, e) => {
+          
           if (e.categoria === "despesa") return total + parseFloat(e.valor);
           return total;
         }, 0); 
@@ -88,7 +92,6 @@
         if (transacao.categoria === 'receita') {
           row.innerHTML = `
             <tr>
-              <td >${transacao.id}</td>
               <td style="text-align:left !important;">${transacao.descricao}</td>
               <td style="text-align:left !important;">
                 ${transacao.valor < 10 
@@ -102,13 +105,13 @@
               <td>${transacao.tipo}</td>
               <td style="color:green; font-weight:bold;">${transacao.status}</td>
               <td style="font-weight:bold; text-align:center;">Sem parcela</td>
+              <td >${transacao.vencimento}</td>
               <td><span onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit"></i></span></td>
             </tr>
           `;
         } else {
           row.innerHTML = `
             <tr>
-              <td>${transacao.id}</td>
               <td style="text-align:left !important;">${transacao.descricao}</td>
               <td style="text-align:left !important;">
                 ${transacao.valor < 10 
@@ -126,6 +129,7 @@
                 transacao.status === 'Vencido' ? 'red' : 'inherit'
               }; font-weight: bold;">${transacao.status}</td>
               <td style="font-weight:bold; text-align:center;">${transacao.parcela}x</td>
+              <td>${transacao.vencimento}</td>
               <td><span onclick="editarTransacao(${transacao.id})"><i class="fas fa-edit"></i></span></td>
             </tr>
           `;
@@ -319,6 +323,9 @@
 
 
 
-
+  const hoje = new Date(); 
+  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+  const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+  const anoHoje = hoje.getFullYear()
 
  
