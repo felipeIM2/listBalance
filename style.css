@@ -491,8 +491,8 @@ td {
     animation: piscar 4s infinite ;
   } 
 
-
-  .modalFiltro {
+  .modalFiltroOff{display: none;}
+  .modalFiltroOn {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -507,7 +507,7 @@ td {
    
   }
 
-  .modalFiltro select {
+  .modalFiltroOn select {
     display: flex;
     width: 150px;
     height: 30px;

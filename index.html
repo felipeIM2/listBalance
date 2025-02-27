@@ -4,213 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Planilha
-
-  </title>
+  <title>Planilha</title>
   <link rel="stylesheet" href="./style.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChartR);
-    google.charts.setOnLoadCallback(drawChartD);
-    google.charts.setOnLoadCallback(drawChartT);
-
-
-      function drawChartR() {
-            
-        let num1;
-        let num2;
-        let num3;
-       
-        let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-
-          if(transacoes){
-            let somaReceitasFixas = transacoes.reduce((total, e) => {
-              if (e.categoria === 'receita' && e.tipo === 'fixa') {
-                return total + parseFloat(e.valor);
-              }
-              return total;
-            }, 0); 
-            num1  = somaReceitasFixas
-          }
-
-          if(transacoes){
-            let somaReceitasVariaveis = transacoes.reduce((total, e) => {
-              if (e.categoria === 'receita' && e.tipo === 'variavel') {
-                return total + parseFloat(e.valor); 
-              }
-              return total;
-            }, 0); 
-            num2 = somaReceitasVariaveis
-          }
-          if(transacoes){
-            let somaReceitas = transacoes.reduce((total, e) => {
-              if(e.categoria === "receita"){
-                return total + parseFloat(e.valor); 
-              }
-            return total
-            }, 0); 
-            num3 = somaReceitas
-          }
-
-          document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3 || 0}`
-
-          let data = google.visualization.arrayToDataTable([
-            ['Task', ''],
-            ['Fixa',   num1],
-            ['Variavel',   num2],
-            
-          ]);
-
-          let options = {
-            title: 'Receitas',
-            is3D: true,
-          };
-
-          var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
-
-          chart.draw(data, options);
-        }
-
-      function drawChartD() {
-          
-          let num1;
-          let num2;
-          let num3;
-          
-          let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-  
-            if(transacoes){
-              let somaDespesasFixas = transacoes.reduce((total, e) => {
-                if (e.categoria === 'despesa' && e.tipo === 'fixa') {
-                  return total + parseFloat(e.valor);
-                }
-                return total;
-              }, 0); 
-              num1 = somaDespesasFixas
-            }
-  
-            if(transacoes){
-              let somaDespesasVariaveis = transacoes.reduce((total, e) => {
-                if (e.categoria === 'despesa' && e.tipo === 'variavel') {
-                  return total + parseFloat(e.valor); 
-                }
-                return total;
-              }, 0); 
-              num2 = somaDespesasVariaveis
-            }
-
-            if(transacoes){
-              let somaDespesas = transacoes.reduce((total, e) => {
-                if(e.categoria === "despesa"){
-                  return total + parseFloat(e.valor); 
-                }
-              return total
-              }, 0); 
-
-              num3 = somaDespesas
-            }
-
-            document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3 || 0}`
-  
-            let data = google.visualization.arrayToDataTable([
-              ['Task', ''],
-              ['Fixa',   num1],
-              ['Variavel',   num2],
-              
-            ]);
-  
-            let options = {
-              title: 'Despesas',
-              is3D: true,
-            };
-  
-            var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
-  
-            chart.draw(data, options);
-          }
-
-        function drawChartT() {
-          
-          let num1;
-          let num2;
-          let num3;
-          
-          let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-  
-            if(transacoes){
-
-              let somaTotal = transacoes.reduce((total, e) => {
-                if (e.categoria === "receita") {
-                  total.receitas += e.valor; 
-                } else if (e.categoria === "despesa") {
-                  total.despesas += e.valor; 
-                }
-                return total; 
-
-              }, { receitas: 0, despesas: 0 }); 
-              
-              let totalFinal = somaTotal.receitas - somaTotal.despesas
-
-              if(totalFinal < 0){
-                num3 = (totalFinal + (- totalFinal) * 2)
-                //console.log(num3)
-              }else {
-                num1 = totalFinal
-              }
-              
-            }
-
-
-            if(transacoes){
-
-              let somaRedutor = transacoes.reduce((total, e) => {
-                if(e.categoria === "despesa" && e.status === "Aberto" || e.status === "Vencido"){
-                  return total + parseFloat(e.valor); 
-                }
-              return total
-              }, 0); 
-              num2 = somaRedutor
-            }
-
-            if(transacoes){
-              
-              let somaReceitas = transacoes.reduce((total, e) => {
-                if(e.categoria === "receita"){
-                  return total + parseFloat(e.valor); 
-                }
-              return total
-              }, 0); 
-              
-              num4 = somaReceitas
-            }
-
-            document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2 || 0}`
-            
-            let data = google.visualization.arrayToDataTable([
-              ['Task', ''],
-              ['Lucro',   num1],  
-              ['Negativo',   num3],
-              ['Entrada',   num4],
-              
-            ]);
-  
-            let options = {
-              title: 'Lucro/Negativo',
-              is3D: true,
-            };
-  
-            var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
-  
-            chart.draw(data, options);
-          }
-
-
-
-    </script>
+  <script type="text/javascript"></script>
 
 </head>
 
@@ -245,7 +44,7 @@
         <ul > 
 
           <li><a href="./cadFin/">Novo Registro</a></li>
-          <li><a>Filtro Avançado</a></li>
+          <li><a id="filtros">Filtro Avançado</a></li>
           <li id="outros"><a >Outros</a></li>
           <div>
             
@@ -273,7 +72,7 @@
 
     <div class="ajuste-tela">
       
-      <div id="modalFiltro" class="modalFiltro">
+      <div id="modalFiltro" class="modalFiltroOff">
 
         <div style="display: flex; margin-bottom: 75%;">
           <select name="mes" id="selectMes">
@@ -399,7 +198,7 @@
       <input type="text" disabled id="nomeCelula">
 
       <label for="valorCelula">Valor:</label>
-      <input type="text" id="valorCelula">
+      <input type="text" id="valorCelula" >
 
       <label for="tipoCelula">Tipo:</label>
       <input type="text" disabled id="tipoCelula">
