@@ -2,6 +2,24 @@
 
 import usuarios from '../usuario.js'
 
+
+  window.addEventListener("load", () => {
+      
+    $(".linha").css({"width":"100%"})
+    setTimeout(() => {
+    
+      $(".linha").css({"background-color":"transparent", "transition":".5s"})
+      $("#tabela").css({"opacity":"1", "transition":" .5s"})
+      $(".totalizadores").css({"opacity":"1", "transition":".5s"})
+    
+
+    }, 500);  
+  })
+
+
+
+
+
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChartR);
   google.charts.setOnLoadCallback(drawChartD);
@@ -212,14 +230,14 @@ import usuarios from '../usuario.js'
       if (e.vencimento != "Sem Vencimento" && e.status === "Aberto") { 
 
         const vencimentoSemBarras = e.vencimento.replace(/\//g, '');  
-        const dia = parseInt(vencimentoSemBarras.substring(0, 2)); 
+        let dia = parseInt(vencimentoSemBarras.substring(0, 2)); 
         let mes = parseInt(vencimentoSemBarras.substring(2, 4)); 
         let ano = parseInt(vencimentoSemBarras.substring(4, 8));
 
-        if(ano === anoHoje && mes > mesHoje) mes = mes + 10;
-        if(ano > anoHoje) ano = ano + 10; 
+        if(ano === anoHoje && diaHoje < dia) dia = dia + 30;
+        if(ano >= anoHoje) ano = ano + 10; 
         validadorDataVencimento = dia + mes + ano;
-
+          console.log(ano)
        if(validadorDataVencimento < validadorDataHoje){
           e.status = "Vencido"
           localStorage.setItem('transacoes', JSON.stringify(transacoes));
@@ -229,7 +247,7 @@ import usuarios from '../usuario.js'
     });
     
   }
-
+alert("validar vencimento")
   function carregarTransacoes() {
     const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
     const tabela = $('#tabela').find('tbody')[0];
@@ -280,6 +298,7 @@ import usuarios from '../usuario.js'
         }
 
       
+    
       renderizarTabela(transacoesFiltradas);
     }
 
@@ -373,11 +392,13 @@ import usuarios from '../usuario.js'
           `;
         }
       });
+
+      
       $(".editar").on("click", (e) => {editarTransacao(e.target.id)}) 
+      
     }
     renderizarTabela(transacoes);
     
-      // setTimeout(() => {validaVencimento(), renderizarTabela()},500);
 
     function editarTransacao(i) {
       
@@ -472,9 +493,11 @@ import usuarios from '../usuario.js'
           })
       $("#modalEditar").attr("class", "modalEditarON") 
     }
-    
+
   }
- carregarTransacoes()
+
+  setTimeout(() => {validaVencimento(),carregarTransacoes()},300);
+
 
  $(".editar").on("click", (e) => {editarTransacao(e.target.id)}) 
  

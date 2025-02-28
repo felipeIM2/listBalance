@@ -30,6 +30,14 @@ text {
   
 }
 
+.linha {
+  background-color: #06eeff91;
+  width: 0%;
+  height: 4px;
+  position: absolute;
+  transition: width .8s;
+}
+
 
 /* Menu Lateral */
 .menu-lateral {
@@ -154,6 +162,7 @@ td {
   background-color: white;
   margin-top: 20px;
   width:  95%;
+  height: 285px;
   border-radius: 8px;
   justify-items: center;
   margin-left: auto;
