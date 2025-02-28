@@ -215,39 +215,51 @@ import usuarios from '../usuario.js'
       chart.draw(data, options);
   }
 
-  const hoje = new Date(); 
-  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
-  const diaHoje = String(hoje.getDate()).padStart(2, '0');        
-  const anoHoje = hoje.getFullYear()
-  let validadorDataHoje = parseInt(mesHoje)+parseInt(diaHoje)+parseInt(anoHoje)
- 
-  const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-  let validadorDataVencimento;
+
+    const hoje = new Date();  
+    const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+    const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+    const anoHoje = hoje.getFullYear();
+    const validadorDataHoje = new Date(anoHoje, mesHoje - 1, diaHoje);
+
+    const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+    let validadorDataVencimento;
 
   function validaVencimento(){
+
+    let achou;
+   
     transacoes.forEach(e => {
      
       if (e.vencimento != "Sem Vencimento" && e.status === "Aberto") { 
 
         const vencimentoSemBarras = e.vencimento.replace(/\//g, '');  
-        let dia = parseInt(vencimentoSemBarras.substring(0, 2)); 
-        let mes = parseInt(vencimentoSemBarras.substring(2, 4)); 
-        let ano = parseInt(vencimentoSemBarras.substring(4, 8));
+        let dia = vencimentoSemBarras.substring(0, 2); 
+        let mes = vencimentoSemBarras.substring(2, 4); 
+        let ano = vencimentoSemBarras.substring(4, 8);
 
-        if(ano === anoHoje && diaHoje < dia) dia = dia + 30;
-        if(ano >= anoHoje) ano = ano + 10; 
-        validadorDataVencimento = dia + mes + ano;
-          console.log(ano)
-       if(validadorDataVencimento < validadorDataHoje){
+        validadorDataVencimento = new Date(ano, mes - 1, dia);
+
+        
+
+        if(validadorDataHoje > validadorDataVencimento){
+         
           e.status = "Vencido"
           localStorage.setItem('transacoes', JSON.stringify(transacoes));
-       }
+          achou = 1
+        }
+
 
       }
     });
-    
+
+    if(achou === 1){
+      alert("Foram alterados itens para o status vencido! ")
+  
+    }
+
   }
-alert("validar vencimento")
+
   function carregarTransacoes() {
     const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
     const tabela = $('#tabela').find('tbody')[0];
@@ -372,10 +384,10 @@ alert("validar vencimento")
               <td style="text-align:left !important;">${transacao.descricao}</td>
               <td style="text-align:left !important;">
                 ${transacao.valor < 10 
-                  ? `R$: -${transacao.valor.toFixed(2).replace(".", ",")}` 
+                  ? `R$: ${transacao.valor.toFixed(2).replace(".", ",")}` 
                   : (transacao.valor % 1 === 0 
-                      ? `R$: -${(transacao.valor).toFixed(0).replace(".", ",")}` 
-                      : `R$: -${(transacao.valor).toFixed(2).replace(".", ",")}`)}
+                      ? `R$: ${(transacao.valor).toFixed(0).replace(".", ",")}` 
+                      : `R$: ${(transacao.valor).toFixed(2).replace(".", ",")}`)}
               </td>
               <td style="color:red; font-weight:bold;">${porcentagemD}%</td>
               <td>${transacao.categoria}</td>
@@ -496,8 +508,8 @@ alert("validar vencimento")
 
   }
 
-  setTimeout(() => {validaVencimento(),carregarTransacoes()},300);
-
+  setTimeout(() => {validaVencimento(), carregarTransacoes()}, 1600);
+  carregarTransacoes()
 
  $(".editar").on("click", (e) => {editarTransacao(e.target.id)}) 
  

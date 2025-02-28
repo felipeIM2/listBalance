@@ -89,10 +89,12 @@ categoriaSelect.change(function() {
   liberarParcelas();
   console.log(categoriaSelect.val())
   if (categoriaSelect.val() === "despesa") {
-    $("#dataForm").css("display", "flex");
+    $("#dataForm").css("opacity", "1");
+    $("#parcelForm").css("opacity", "1");
     $("#checkData").prop("checked", true);
   } else {
-    $("#dataForm").css("display", "none");
+    $("#dataForm").css("opacity", "0");
+    $("#parcelForm").css("opacity", "0");
     $("#checkData").prop("checked", false);
   }
   
@@ -107,6 +109,7 @@ function liberarParcelas() {
     parcelado.removeAttr("disabled");
   } else {
     parcelado.attr("disabled", "true");
+    parcelado.val("1")
   }
 }
 

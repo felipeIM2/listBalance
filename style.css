@@ -31,9 +31,9 @@ text {
 }
 
 .linha {
-  background-color: #06eeff91;
+  background-color: white ; /* #069bff91 */
   width: 0%;
-  height: 4px;
+  height: 3px;
   position: absolute;
   transition: width .8s;
 }
@@ -352,14 +352,14 @@ td {
     transition: .6s;
   }
   
-  #totalR:hover {
+  /* #totalR:hover {
     background-color: rgb(76,175,79, 0.8);
     scale: 1.01;
     transition: .6s;
     color: white;
     border-radius: 30px;
     font-weight: 700;
-  }
+  } */
 
   path {
     cursor: pointer;
@@ -378,14 +378,14 @@ td {
     
   }
 
-  #totalD:hover {
+  /* #totalD:hover {
     background-color:rgb(175, 3, 3, 0.8) ;
     color:white;
     scale: 1.01;
     transition: .6s;
     border-radius: 30px;
     font-weight: 700;
-  }
+  } */
 
   .pesquisa {
     width: 100px;
@@ -426,15 +426,15 @@ td {
     cursor: pointer;
     transition: .6s;  
   }
-
-  #totalN:hover {
+  
+/* #totalN:hover {
     background-color:rgb(247, 190, 6, 0.8) ;
     color:white;
     scale: 1.01;
     transition: .6s;
     border-radius: 30px;
     font-weight: 700;
-  }
+  } */
 
 
   .pesquisa-container {
