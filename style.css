@@ -31,7 +31,7 @@ text {
 }
 
 .linha {
-  background-color: white ; /* #069bff91 */
+  background-color: rgba(202, 201, 201, 0.705) ; /* #069bff91 */
   width: 0%;
   height: 3px;
   position: absolute;

@@ -103,6 +103,7 @@
               <th>Tipo</th>
               <th>Status</th>
               <th>Parcelado</th>
+              <th>Parcela</th>
               <th>Vencimento</th>
               <th><i class="fa fa-filter" id="filtro"></i></th>
 
@@ -144,6 +145,9 @@
 
               <td class="pesquisa-container">
                 <input type="text" class="pesquisa" id="parcelado" autocomplete="off">
+              </td> 
+              <td class="pesquisa-container" >
+                -------
               </td>  
 
               <td class="pesquisa-container">
@@ -185,7 +189,7 @@
 
       <label for="selectStatus">Status:</label>
       <select id="selectStatus">
-        <option value="" id="optAtual"></option>
+        <option id="optAtual"></option>
         <option value="Quitado">Quitado</option>
       </select>
 

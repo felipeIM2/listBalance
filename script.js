@@ -349,14 +349,13 @@ import usuarios from '../usuario.js'
         }, 0); 
 
         let somaDespesas = transacoes.reduce((total, e) => {
-          
-          if (e.categoria === "despesa") return total + parseFloat(e.valor);
+          if (e.categoria === "despesa" && e.mesHoje === mesHoje) return total + parseFloat(e.valor);
           return total;
         }, 0); 
 
         let porcentagemR = ((transacao.valor / somaReceitas) * 100).toFixed(1);
         let porcentagemD = ((transacao.valor / somaDespesas) * 100).toFixed(1);
-
+        
         const row = tabela.insertRow();
         if (transacao.categoria === 'receita') {
           row.innerHTML = `
@@ -374,11 +373,13 @@ import usuarios from '../usuario.js'
               <td>${transacao.tipo}</td>
               <td style="color:green; font-weight:bold;">${transacao.status}</td>
               <td style="font-weight:bold; text-align:center;">Sem parcela</td>
+              <td style="font-weight:bold; text-align:center;">1</td>
               <td >${transacao.vencimento}</td>
               <td><span class="editar"><i class="fas fa-edit" id="${transacao.id}"></i></span></td>
             </tr>
           `;
-        } else {
+        } else if(transacao.mesHoje === mesHoje) {
+
           row.innerHTML = `
             <tr>
               <td style="text-align:left !important;">${transacao.descricao}</td>
@@ -397,7 +398,8 @@ import usuarios from '../usuario.js'
                 transacao.status === 'Aberto' ? 'darkorange' :
                 transacao.status === 'Vencido' ? 'red' : 'inherit'
               }; font-weight: bold;">${transacao.status}</td>
-              <td style="font-weight:bold; text-align:center;">${transacao.parcela}x</td>
+              <td style="font-weight:bold; text-align:center;">${transacao.parcelado}x</td>
+              <td style="font-weight:bold; text-align:center;">${transacao.parcela}</td>
               <td>${transacao.vencimento}</td>
               <td><span class="editar" ><i class="fas fa-edit" id="${transacao.id}"></i></span></td>
             </tr>

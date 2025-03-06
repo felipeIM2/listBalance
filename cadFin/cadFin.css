@@ -114,3 +114,35 @@ button:hover {
         margin: 5px 0;
     }
 }
+
+
+
+#modalContent {
+    background-color: white;
+    border-radius: 20px;
+    width: 800px;
+    height: auto;
+    margin-top: 5%;
+    padding: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-items: center;
+}
+
+table {
+    height: 100%;
+    width: 100%;
+}
+
+td {
+    /* background-color: #5555; */
+    padding: 5px;
+    height: 35px;
+    border: none;
+    text-align: center;
+    border: 1px solid #5555;
+    background-color: #55555527;
+    border-radius: 5px;
+}
+
