@@ -17,7 +17,11 @@ import usuarios from '../usuario.js'
   })
 
 
-
+  const hoje = new Date();  
+  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+  const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+  const anoHoje = hoje.getFullYear();
+  const validadorDataHoje = new Date(anoHoje, mesHoje - 1, diaHoje);
 
 
   google.charts.load('current', {'packages':['corechart']});
@@ -35,7 +39,7 @@ import usuarios from '../usuario.js'
 
       if(transacoes){
         let somaReceitasFixas = transacoes.reduce((total, e) => {
-          if (e.categoria === 'receita' && e.tipo === 'fixa') {
+          if (e.categoria === 'receita' && e.tipo === 'fixa' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
             return total + parseFloat(e.valor);
           }
           return total;
@@ -45,7 +49,7 @@ import usuarios from '../usuario.js'
 
       if(transacoes){
         let somaReceitasVariaveis = transacoes.reduce((total, e) => {
-          if (e.categoria === 'receita' && e.tipo === 'variavel') {
+          if (e.categoria === 'receita' && e.tipo === 'variavel' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
             return total + parseFloat(e.valor); 
           }
           return total;
@@ -54,7 +58,7 @@ import usuarios from '../usuario.js'
       }
       if(transacoes){
         let somaReceitas = transacoes.reduce((total, e) => {
-          if(e.categoria === "receita"){
+          if(e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`){
             return total + parseFloat(e.valor); 
           }
         return total
@@ -62,7 +66,7 @@ import usuarios from '../usuario.js'
         num3 = somaReceitas
       }
 
-      document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3 || 0}`
+      document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3.toFixed(2) || 0}`
 
       let data = google.visualization.arrayToDataTable([
         ['Task', ''],
@@ -91,7 +95,7 @@ import usuarios from '../usuario.js'
 
         if(transacoes){
           let somaDespesasFixas = transacoes.reduce((total, e) => {
-            if (e.categoria === 'despesa' && e.tipo === 'fixa') {
+            if (e.categoria === 'despesa' && e.tipo === 'fixa' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
               return total + parseFloat(e.valor);
             }
             return total;
@@ -101,7 +105,7 @@ import usuarios from '../usuario.js'
 
         if(transacoes){
           let somaDespesasVariaveis = transacoes.reduce((total, e) => {
-            if (e.categoria === 'despesa' && e.tipo === 'variavel') {
+            if (e.categoria === 'despesa' && e.tipo === 'variavel' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
               return total + parseFloat(e.valor); 
             }
             return total;
@@ -111,7 +115,7 @@ import usuarios from '../usuario.js'
 
         if(transacoes){
           let somaDespesas = transacoes.reduce((total, e) => {
-            if(e.categoria === "despesa"){
+            if(e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`){
               return total + parseFloat(e.valor); 
             }
           return total
@@ -120,7 +124,7 @@ import usuarios from '../usuario.js'
           num3 = somaDespesas
         }
 
-        document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3 || 0}`
+        document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3.toFixed(2) || 0}`
 
         let data = google.visualization.arrayToDataTable([
           ['Task', ''],
@@ -151,9 +155,9 @@ import usuarios from '../usuario.js'
       if(transacoes){
 
         let somaTotal = transacoes.reduce((total, e) => {
-          if (e.categoria === "receita") {
+          if (e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`) {
             total.receitas += e.valor; 
-          } else if (e.categoria === "despesa") {
+          } else if (e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`) {
             total.despesas += e.valor; 
           }
           return total; 
@@ -175,7 +179,9 @@ import usuarios from '../usuario.js'
       if(transacoes){
 
         let somaRedutor = transacoes.reduce((total, e) => {
-          if(e.categoria === "despesa" && e.status === "Aberto" || e.status === "Vencido"){
+         
+          if(e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}` && e.status === "Aberto" || e.status === "Vencido" ){
+            console.log(e)
             return total + parseFloat(e.valor); 
           }
         return total
@@ -186,7 +192,8 @@ import usuarios from '../usuario.js'
       if(transacoes){
         
         let somaReceitas = transacoes.reduce((total, e) => {
-          if(e.categoria === "receita"){
+         
+          if(e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`){
             return total + parseFloat(e.valor); 
           }
         return total
@@ -195,7 +202,7 @@ import usuarios from '../usuario.js'
         num4 = somaReceitas
       }
 
-      document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2 || 0}`
+      document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`
       
       let data = google.visualization.arrayToDataTable([
         ['Task', ''],
@@ -216,11 +223,7 @@ import usuarios from '../usuario.js'
   }
 
 
-    const hoje = new Date();  
-    const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
-    const diaHoje = String(hoje.getDate()).padStart(2, '0');        
-    const anoHoje = hoje.getFullYear();
-    const validadorDataHoje = new Date(anoHoje, mesHoje - 1, diaHoje);
+
 
     const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
     let validadorDataVencimento;
@@ -349,7 +352,7 @@ import usuarios from '../usuario.js'
         }, 0); 
 
         let somaDespesas = transacoes.reduce((total, e) => {
-          if (e.categoria === "despesa" && e.mesHoje === mesHoje) return total + parseFloat(e.valor);
+          if (e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`) return total + parseFloat(e.valor);
           return total;
         }, 0); 
 
@@ -378,8 +381,8 @@ import usuarios from '../usuario.js'
               <td><span class="editar"><i class="fas fa-edit" id="${transacao.id}"></i></span></td>
             </tr>
           `;
-        } else if(transacao.mesHoje === mesHoje) {
-
+        } else if(transacao.mesHoje === `${mesHoje}/${anoHoje}`) {
+          
           row.innerHTML = `
             <tr>
               <td style="text-align:left !important;">${transacao.descricao}</td>

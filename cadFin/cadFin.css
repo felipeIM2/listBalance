@@ -128,6 +128,8 @@ button:hover {
     margin-right: auto;
     /* align-items: center;
     justify-items: center; */
+    /* max-height: 600px;
+    overflow-y: auto */
 }
 
 table {
@@ -146,10 +148,19 @@ td {
     border-radius: 5px;
 }
 
-    #modalContent button {
-     background-color: transparent;
-     color: black;
-     padding: 4px;
-     font-size: 16px; 
-     margin: 0;
-    }
+#modalContent button {
+    background-color: transparent;
+    color: black;
+    padding: 4px;
+    font-size: 16px; 
+    margin: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0px;
+    cursor: pointer;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#modalContent button:hover {
+    border-bottom: 2px solid black;
+}

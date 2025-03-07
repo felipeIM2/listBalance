@@ -71,7 +71,8 @@ $("#adicionar").click(() => {
 
     let valorParcela = valor / totalParcelas;
     let parcelas = [];
-
+      
+      
     for (let i = 0; i < totalParcelas; i++) {
       let mesParcela = mesHoje + i;
       let anoParcela = anoHoje;
@@ -92,7 +93,7 @@ $("#adicionar").click(() => {
 
       parcelas.push({
         descricao,
-        valor: valorParcela,
+        valor: Number(valorParcela.toFixed(2)),
         categoria,
         tipo,
         pessoa,
@@ -100,7 +101,7 @@ $("#adicionar").click(() => {
         status: "Aberto",
         parcela: `${i + 1}/${totalParcelas}`, 
         parcelado: totalParcelas,
-        mesHoje: mesParcela,
+        mesHoje: `${mesParcela}/${anoParcela}`,
         id: id + i
       });
     }
@@ -118,7 +119,7 @@ $("#adicionar").click(() => {
       pessoa,
       parcela,
       parcelado: totalParcelas,
-      mesHoje,
+      mesHoje: `${mesHoje}/${anoHoje}`,
       vencimento,
       status
     };
