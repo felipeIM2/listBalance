@@ -25,7 +25,7 @@ $("#adicionar").click(() => {
   let pessoa = $("#pessoa").val();
 
   const hoje = new Date();
-  const mesHoje = hoje.getMonth() + 1; 
+  let mesHoje = hoje.getMonth() + 1; 
   const anoHoje = hoje.getFullYear();
 
   let check = $("#checkData");
@@ -61,9 +61,9 @@ $("#adicionar").click(() => {
     }
   }
 
-  let id = new Date().getTime(); // Usando um ID único baseado no timestamp
-  
-  if (totalParcelas > 1) {
+  let id = new Date().getTime(); 
+    
+  if (totalParcelas > 1 && categoria === "despesa") {
 
     if (vencimento === "Sem Vencimento") { 
       return alert('Favor indicar o dia do vencimento no campo "Vencimento" ');
@@ -75,18 +75,19 @@ $("#adicionar").click(() => {
     for (let i = 0; i < totalParcelas; i++) {
       let mesParcela = mesHoje + i;
       let anoParcela = anoHoje;
+    
       
       if (mesParcela > 12) {
-        anoParcela++;
-        mesParcela = mesParcela % 12;
+        anoParcela += Math.floor((mesParcela - 1) / 12); 
+        mesParcela = (mesParcela - 1) % 12 + 1;
       }
 
       mesParcela = String(mesParcela).padStart(2, '0');
 
+
       if (vencimento) {
-        let [vencimentoDia, vencimentoMes, vencimentoAno] = vencimento.split('/').map(Number);
-        vencimentoMes = mesParcela;
-        vencimento = `${vencimentoDia}/${vencimentoMes}/${vencimentoAno}`;
+        let [vencimentoDia] = vencimento.split('/').map(Number);
+        vencimento = `${vencimentoDia}/${mesParcela}/${anoParcela}`;
       }
 
       parcelas.push({
@@ -107,7 +108,7 @@ $("#adicionar").click(() => {
     // Salvar as parcelas no sessionStorage para revisão
     sessionStorage.setItem('parcelasTemp', JSON.stringify(parcelas));
   } else {
-    // Se for uma única parcela, adiciona diretamente ao sessionStorage
+    mesHoje = String(mesHoje).padStart(2, '0');
     const transacao = {
       id,
       descricao,
@@ -121,12 +122,19 @@ $("#adicionar").click(() => {
       vencimento,
       status
     };
-    sessionStorage.setItem('parcelasTemp', JSON.stringify([transacao]));
+        // console.log(transacao.mesHoje)
+      setTimeout(() => {
+        const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+        transacoes.push(transacao);
+        localStorage.setItem('transacoes', JSON.stringify(transacoes));
+        alert("Novo Registro adicionado com Sucesso!");
+      }, 400);
   }
 
   
-  mostrarModal();
-
+    if(categoria === "despesa" && totalParcelas > 1){
+        mostrarModal();
+    }
   
   $('#descricao').val('');
   $('#valor').val('');
@@ -134,15 +142,21 @@ $("#adicionar").click(() => {
 });
 
 
-const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
+
 // console.log(parcelas)
 
 function mostrarModal() {
+
+  const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
 
   $(".container").hide();
 
   let modalContent = `
     <table>
+      <div style="margin-bottom:20px">
+        <button id="gravarParcelas">Gerar Parcelas</button>
+        <button id="cancelarParcelas">Cancelar</button></div>
+      </div>
       <thead>
         <tr>
           <th>Descrição</th>
@@ -156,6 +170,7 @@ function mostrarModal() {
   `;
 
   parcelas.forEach(parcela => {
+    // console.log(parcela)
     modalContent += `
       <tr>
         <td>${parcela.descricao}</td>
@@ -173,31 +188,31 @@ function mostrarModal() {
     </table>
   `;
 
-  // Inserir o conteúdo da tabela no modal
-  $('#modalContent').html(modalContent);
-
-  // Exibir o modal
-  $('#modal').show();
+  setTimeout(() => {
+    $('#modalContent').html(modalContent);
+    $('#modal').show();
 
 
-  // Função para gravar as parcelas no localStorage
-  $("#gravarParcelas").click(() => {
-    const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
-    const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-    transacoes.push(...parcelas);
-    localStorage.setItem('transacoes', JSON.stringify(transacoes));
-    sessionStorage.removeItem('parcelasTemp'); // Limpar o sessionStorage
-    alert('Parcelas gravadas com sucesso!');
-    $('#modal').hide();
-  });
+    $("#gravarParcelas").click(() => {
+      const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
+      const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+      transacoes.push(...parcelas);
+      localStorage.setItem('transacoes', JSON.stringify(transacoes));
+      sessionStorage.removeItem('parcelasTemp'); 
+      alert('Parcelas gravadas com sucesso!');
+      $('#modal').hide();
+      $(".container").show();
+    });
 
 
-  $("#cancelarParcelas").on("click", () => {
-    sessionStorage.removeItem('parcelasTemp'); 
-    $('#modal').hide();
-    $(".container").show();
-  });
+    $("#cancelarParcelas").on("click", () => {
+      sessionStorage.removeItem('parcelasTemp'); 
+      $('#modal').hide();
+      $(".container").show();
+    });
 
+
+  }, 400);
 }
 
 
@@ -206,12 +221,13 @@ $("#cancelar").click(() => location = "../index.html");
 $(document).ready(() => {
   $('body').append(`
     <div id="modal" style="display:none">
+        <h1 style="color:white; font-size:40px">
+          Gerar Parcelas
+        </h1>
       <div id="modalContent">
+
       </div>
-      <div style="margin-top:30px">
-        <button id="gravarParcelas">Gerar Parcelas</button>
-        <button id="cancelarParcelas">Cancelar</button></div>
-      </div>
+
     </div>
   `);
 });
