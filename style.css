@@ -538,3 +538,25 @@ td {
     color: white;
     font-size: 20px;
   }
+
+  .dataHoje {
+    text-align: center;
+    color: white;
+    margin-top: 30px;
+
+  }
+
+  .dataHoje label {
+    margin: 0px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    font-size: 20px;
+  }
+
+  .dataHoje input {
+    text-align: center;
+    background-color: transparent;
+    border: transparent;
+    color: white;
+    font-size: 15px;
+  }

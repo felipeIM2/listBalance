@@ -33,7 +33,7 @@ $("#adicionar").click(() => {
 
   if (check.prop('checked') === true) {
     let vencimentoData = $("#data").val();
-    let [ano, mes, dia] = vencimentoData.split('-').map(Number);
+    var [ano, mes, dia] = vencimentoData.split('-').map(Number);
 
     if (!dia || !mes || ano < anoHoje) {
       return alert("Favor inserir as informações do campo Vencimento corretamente!");
@@ -52,10 +52,10 @@ $("#adicionar").click(() => {
 
   if (categoria === "receita") {
     status = "Entrada";
-    parcela = "Sem parcela";
+    parcela = "1";
   } else if (categoria === "despesa") {
     status = "Aberto";
-    parcela = totalParcelas > 1 ? `1/${totalParcelas}` : "Sem parcela";
+    parcela = totalParcelas > 1 ? `1/${totalParcelas}` : "1/1";
     if (tipo === "fixa") {
       parcela = "1/1"; 
     }
@@ -64,7 +64,7 @@ $("#adicionar").click(() => {
   let id = new Date().getTime(); 
     
   if (totalParcelas > 1 && categoria === "despesa") {
-
+        
     if (vencimento === "Sem Vencimento") { 
       return alert('Favor indicar o dia do vencimento no campo "Vencimento" ');
     }
@@ -74,23 +74,33 @@ $("#adicionar").click(() => {
       
       
     for (let i = 0; i < totalParcelas; i++) {
-      let mesParcela = mesHoje + i;
-      let anoParcela = anoHoje;
-    
+
+      const diaHoje = String(hoje.getDate()).padStart(2, '0');
+     
+      let mesParcela = mes + i;
+      let anoParcela = ano;
       
       if (mesParcela > 12) {
         anoParcela += Math.floor((mesParcela - 1) / 12); 
         mesParcela = (mesParcela - 1) % 12 + 1;
       }
 
+      let dataMesHoje = mesHoje + i;
+      let dataAnoHoje = anoHoje;
+      
+      if (mesParcela > 12) {
+        dataMesHoje += Math.floor((dataMesHoje - 1) / 12); 
+        dataAnoHoje = (dataAnoHoje - 1) % 12 + 1;
+      }
+      let mesFormatado = String(dataMesHoje).padStart(2, '0');
+
       mesParcela = String(mesParcela).padStart(2, '0');
-
-
       if (vencimento) {
         let [vencimentoDia] = vencimento.split('/').map(Number);
         vencimento = `${vencimentoDia}/${mesParcela}/${anoParcela}`;
       }
-
+      
+      
       parcelas.push({
         descricao,
         valor: Number(valorParcela.toFixed(2)),
@@ -101,14 +111,16 @@ $("#adicionar").click(() => {
         status: "Aberto",
         parcela: `${i + 1}/${totalParcelas}`, 
         parcelado: totalParcelas,
-        mesHoje: `${mesParcela}/${anoParcela}`,
+        mesHoje: `${dataAnoHoje}-${mesFormatado}-${diaHoje}`,
         id: id + i
       });
+      // return  console.log(parcelas)
     }
-
+    // return console.log(parcelas);
     // Salvar as parcelas no sessionStorage para revisão
     sessionStorage.setItem('parcelasTemp', JSON.stringify(parcelas));
   } else {
+    const diaHoje = String(hoje.getDate()).padStart(2, '0');  
     mesHoje = String(mesHoje).padStart(2, '0');
     const transacao = {
       id,
@@ -119,11 +131,11 @@ $("#adicionar").click(() => {
       pessoa,
       parcela,
       parcelado: totalParcelas,
-      mesHoje: `${mesHoje}/${anoHoje}`,
+      mesHoje: `${anoHoje}-${mesHoje}-${diaHoje}`,
       vencimento,
       status
     };
-        // console.log(transacao.mesHoje)
+    //  return
       setTimeout(() => {
         const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
         transacoes.push(transacao);

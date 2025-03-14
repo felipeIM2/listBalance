@@ -11,221 +11,231 @@ import usuarios from '../usuario.js'
       $(".linha").css({"background-color":"transparent", "transition":".5s"})
       $("#tabela").css({"opacity":"1", "transition":" .5s"})
       $(".totalizadores").css({"opacity":"1", "transition":".5s"})
-    
+      $("#dataHoje").css({"opacity":"1", "transition":".5s"})
 
     }, 500);  
+
+    let dataAtual = $("#dataHoje")
+      const hoje = new Date();  
+      const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+      const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+      const anoHoje = hoje.getFullYear();
+     dataAtual.val(`${anoHoje}-${mesHoje}-${diaHoje}`)
+     let verifyData = sessionStorage.getItem("filtroData")
+     if(verifyData) sessionStorage.removeItem("filtroData")
   })
 
 
-  const hoje = new Date();  
-  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
-  const diaHoje = String(hoje.getDate()).padStart(2, '0');        
-  const anoHoje = hoje.getFullYear();
-  const validadorDataHoje = new Date(anoHoje, mesHoje - 1, diaHoje);
+  let filtroData;
+  let transacoes;
+  let validadorDataHoje;
+
+  function aplicarFiltroData() {
+
+    filtroData = sessionStorage.getItem("filtroData")
+
+    const hoje = new Date();  
+    const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+    const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+    const anoHoje = hoje.getFullYear();
+     validadorDataHoje = new Date(anoHoje, mesHoje - 1, diaHoje);
+
+    if(filtroData){
+      // Aqui, ao invés de usar mesHoje e anoHoje nas transações, vamos filtrar diretamente com filtroData
+      transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+      transacoes = transacoes.filter(e => e.mesHoje.includes(filtroData));
+    }else{
+      transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+      filtroData = `${anoHoje}-${mesHoje}`
+    }
+
+  }
+  aplicarFiltroData()
 
 
+  
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChartR);
   google.charts.setOnLoadCallback(drawChartD);
   google.charts.setOnLoadCallback(drawChartT);
-
+  
   function drawChartR() {
-        
     let num1;
     let num2;
     let num3;
-   
-    let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-
-      if(transacoes){
-        let somaReceitasFixas = transacoes.reduce((total, e) => {
-          if (e.categoria === 'receita' && e.tipo === 'fixa' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-            return total + parseFloat(e.valor);
-          }
-          return total;
-        }, 0); 
-        num1  = somaReceitasFixas
-      }
-
-      if(transacoes){
-        let somaReceitasVariaveis = transacoes.reduce((total, e) => {
-          if (e.categoria === 'receita' && e.tipo === 'variavel' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-            return total + parseFloat(e.valor); 
-          }
-          return total;
-        }, 0); 
-        num2 = somaReceitasVariaveis
-      }
-      if(transacoes){
-        let somaReceitas = transacoes.reduce((total, e) => {
-          if(e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`){
-            return total + parseFloat(e.valor); 
-          }
-        return total
-        }, 0); 
-        num3 = somaReceitas
-      }
-
-      document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3.toFixed(2) || 0}`
-
-      let data = google.visualization.arrayToDataTable([
-        ['Task', ''],
-        ['Fixa',   num1],
-        ['Variavel',   num2],
-        
-      ]);
-
-      let options = {
-        title: 'Receitas',
-        is3D: true,
-      };
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
-
-      chart.draw(data, options);
-  }
-
-  function drawChartD() {
-      
-      let num1;
-      let num2;
-      let num3;
-      
-      let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-
-        if(transacoes){
-          let somaDespesasFixas = transacoes.reduce((total, e) => {
-            if (e.categoria === 'despesa' && e.tipo === 'fixa' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-              return total + parseFloat(e.valor);
-            }
-            return total;
-          }, 0); 
-          num1 = somaDespesasFixas
-        }
-
-        if(transacoes){
-          let somaDespesasVariaveis = transacoes.reduce((total, e) => {
-            if (e.categoria === 'despesa' && e.tipo === 'variavel' && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-              return total + parseFloat(e.valor); 
-            }
-            return total;
-          }, 0); 
-          num2 = somaDespesasVariaveis
-        }
-
-        if(transacoes){
-          let somaDespesas = transacoes.reduce((total, e) => {
-            if(e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`){
-              return total + parseFloat(e.valor); 
-            }
-          return total
-          }, 0); 
-
-          num3 = somaDespesas
-        }
-
-        document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3.toFixed(2) || 0}`
-
-        let data = google.visualization.arrayToDataTable([
-          ['Task', ''],
-          ['Fixa',   num1],
-          ['Variavel',   num2],
-          
-        ]);
-
-        let options = {
-          title: 'Despesas',
-          is3D: true,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
-
-        chart.draw(data, options);
-  }
-
-  function drawChartT() {
     
+    if(transacoes){
+      let somaReceitasFixas = transacoes.reduce((total, e) => {
+        // console.log(e.mesHoje.includes(filtroData))
+        if (e.categoria === 'receita' && e.tipo === 'fixa' && e.mesHoje.includes(filtroData)) {
+          return total + parseFloat(e.valor);
+        }
+        return total;
+      }, 0); 
+      num1  = somaReceitasFixas
+    }
+      
+    if(transacoes){
+      let somaReceitasVariaveis = transacoes.reduce((total, e) => {
+        if (e.categoria === 'receita' && e.tipo === 'variavel' && e.mesHoje.includes(filtroData)) {
+          return total + parseFloat(e.valor); 
+        }
+        return total;
+      }, 0); 
+      num2 = somaReceitasVariaveis
+    }
+    if(transacoes){
+      let somaReceitas = transacoes.reduce((total, e) => {
+        if(e.categoria === "receita" && e.mesHoje.includes(filtroData)){
+          return total + parseFloat(e.valor); 
+        }
+      return total
+      }, 0); 
+      num3 = somaReceitas
+    }
+  
+    document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3.toFixed(2) || 0}`
+  
+    let data = google.visualization.arrayToDataTable([
+      ['Task', ''],
+      ['Fixa',   num1],
+      ['Variavel',   num2],
+      
+    ]);
+  
+    let options = {
+      title: 'Receitas',
+      is3D: true,
+    };
+  
+    var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
+    chart.draw(data, options);
+  }
+  
+  function drawChartD() {
+    let num1;
+    let num2;
+    let num3;
+  
+    if(transacoes){
+      let somaDespesasFixas = transacoes.reduce((total, e) => {
+        if (e.categoria === 'despesa' && e.tipo === 'fixa' && e.mesHoje.includes(filtroData)) {
+          return total + parseFloat(e.valor);
+        }
+        return total;
+      }, 0); 
+      num1 = somaDespesasFixas
+    }
+  
+    if(transacoes){
+      let somaDespesasVariaveis = transacoes.reduce((total, e) => {
+        if (e.categoria === 'despesa' && e.tipo === 'variavel' && e.mesHoje.includes(filtroData)) {
+          return total + parseFloat(e.valor); 
+        }
+        return total;
+      }, 0); 
+      num2 = somaDespesasVariaveis
+    }
+  
+    if(transacoes){
+      let somaDespesas = transacoes.reduce((total, e) => {
+        if(e.categoria === "despesa" && e.mesHoje.includes(filtroData)){
+          return total + parseFloat(e.valor); 
+        }
+      return total
+      }, 0); 
+  
+      num3 = somaDespesas
+    }
+  
+    document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3.toFixed(2) || 0}`
+  
+    let data = google.visualization.arrayToDataTable([
+      ['Task', ''],
+      ['Fixa',   num1],
+      ['Variavel',   num2],
+      
+    ]);
+  
+    let options = {
+      title: 'Despesas',
+      is3D: true,
+    };
+  
+    var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
+    chart.draw(data, options);
+  }
+  
+  function drawChartT() {
     let num1;
     let num2;
     let num3;
     let num4;
-    
-    let  transacoes = JSON.parse(localStorage.getItem("transacoes"))
-
-      if(transacoes){
-
-        let somaTotal = transacoes.reduce((total, e) => {
-          if (e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-            total.receitas += e.valor; 
-          } else if (e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`) {
-            total.despesas += e.valor; 
-          }
-          return total; 
-
-        }, { receitas: 0, despesas: 0 }); 
-        
-        let totalFinal = somaTotal.receitas - somaTotal.despesas
-
-        if(totalFinal < 0){
-          num3 = (totalFinal + (- totalFinal) * 2)
-          //console.log(num3)
-        }else {
-          num1 = totalFinal
+  
+    if(transacoes){
+      let somaTotal = transacoes.reduce((total, e) => {
+        if (e.categoria === "receita" && e.mesHoje.includes(filtroData)) {
+          total.receitas += e.valor; 
+        } else if (e.categoria === "despesa" && e.mesHoje.includes(filtroData)) {
+          total.despesas += e.valor; 
         }
-        
-      }
-
-
-      if(transacoes){
-
-        let somaRedutor = transacoes.reduce((total, e) => {
-         
-          if(e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}` && e.status === "Aberto" || e.status === "Vencido" ){
-            console.log(e)
-            return total + parseFloat(e.valor); 
-          }
-        return total
-        }, 0); 
-        num2 = somaRedutor
-      }
-
-      if(transacoes){
-        
-        let somaReceitas = transacoes.reduce((total, e) => {
-         
-          if(e.categoria === "receita" && e.mesHoje === `${mesHoje}/${anoHoje}`){
-            return total + parseFloat(e.valor); 
-          }
-        return total
-        }, 0); 
-        
-        num4 = somaReceitas
-      }
-
-      document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`
+        return total; 
+  
+      }, { receitas: 0, despesas: 0 }); 
       
-      let data = google.visualization.arrayToDataTable([
-        ['Task', ''],
-        ['Lucro',   num1],  
-        ['Negativo',   num3],
-        ['Entrada',   num4],
-        
-      ]);
-
-      let options = {
-        title: 'Lucro/Negativo',
-        is3D: true,
-      };
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
-
-      chart.draw(data, options);
+      let totalFinal = somaTotal.receitas - somaTotal.despesas
+  
+      if(totalFinal < 0){
+        num3 = (totalFinal + (- totalFinal) * 2)
+      }else {
+        num1 = totalFinal
+      }
+    }
+  
+    if(transacoes){
+      let somaRedutor = transacoes.reduce((total, e) => {
+        if(e.categoria === "despesa" && e.mesHoje.includes(filtroData) && e.status === "Aberto" || e.status === "Vencido" ){
+          return total + parseFloat(e.valor); 
+        }
+      return total
+      }, 0); 
+      num2 = somaRedutor
+    }
+  
+    if(transacoes){
+      let somaReceitas = transacoes.reduce((total, e) => {
+        if(e.categoria === "receita" && e.mesHoje.includes(filtroData)){
+          return total + parseFloat(e.valor); 
+        }
+      return total
+      }, 0); 
+      
+      num4 = somaReceitas
+    }
+  
+    document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`
+  
+    let data = google.visualization.arrayToDataTable([
+      ['Task', ''],
+      ['Lucro',   num1],  
+      ['Negativo',   num3],
+      ['Entrada',   num4],
+      
+    ]);
+  
+    let options = {
+      title: 'Lucro/Negativo',
+      is3D: true,
+    };
+  
+    var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
+    chart.draw(data, options);
   }
+  
 
 
 
-
-    const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+    // const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
     let validadorDataVencimento;
 
   function validaVencimento(){
@@ -242,7 +252,7 @@ import usuarios from '../usuario.js'
         let ano = vencimentoSemBarras.substring(4, 8);
 
         validadorDataVencimento = new Date(ano, mes - 1, dia);
-
+          // console.log(validadorDataHoje, validadorDataVencimento)
         
 
         if(validadorDataHoje > validadorDataVencimento){
@@ -264,7 +274,7 @@ import usuarios from '../usuario.js'
   }
 
   function carregarTransacoes() {
-    const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+    // const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
     const tabela = $('#tabela').find('tbody')[0];
     tabela.innerHTML = ''; 
 
@@ -301,7 +311,7 @@ import usuarios from '../usuario.js'
           matchField(transacao.status, recStatus) &&
           matchField(transacao.categoria, recCategoria) &&
           matchField(transacao.tipo, recTipo) &&
-          matchField(transacao.parcela, recParcelado) &&
+          matchField(transacao.parcelado, recParcelado) &&
           matchField(transacao.vencimento, recVencimento);
       });
 
@@ -352,7 +362,7 @@ import usuarios from '../usuario.js'
         }, 0); 
 
         let somaDespesas = transacoes.reduce((total, e) => {
-          if (e.categoria === "despesa" && e.mesHoje === `${mesHoje}/${anoHoje}`) return total + parseFloat(e.valor);
+          if (e.categoria === "despesa" && e.mesHoje.includes(filtroData)) return total + parseFloat(e.valor);
           return total;
         }, 0); 
 
@@ -360,6 +370,7 @@ import usuarios from '../usuario.js'
         let porcentagemD = ((transacao.valor / somaDespesas) * 100).toFixed(1);
         
         const row = tabela.insertRow();
+          // console.log(transacao.mesHoje, filtroData)
         if (transacao.categoria === 'receita') {
           row.innerHTML = `
             <tr>
@@ -375,14 +386,13 @@ import usuarios from '../usuario.js'
               <td>${transacao.categoria}</td>
               <td>${transacao.tipo}</td>
               <td style="color:green; font-weight:bold;">${transacao.status}</td>
-              <td style="font-weight:bold; text-align:center;">Sem parcela</td>
-              <td style="font-weight:bold; text-align:center;">1</td>
+              <td style="font-weight:bold; text-align:center;">1x</td>
+              <td style="font-weight:bold; text-align:center;">${transacao.parcelado}</td>
               <td >${transacao.vencimento}</td>
               <td><span class="editar"><i class="fas fa-edit" id="${transacao.id}"></i></span></td>
             </tr>
           `;
-        } else if(transacao.mesHoje === `${mesHoje}/${anoHoje}`) {
-          
+        } else if(transacao.mesHoje.includes(filtroData)) {
           row.innerHTML = `
             <tr>
               <td style="text-align:left !important;">${transacao.descricao}</td>
@@ -471,6 +481,7 @@ import usuarios from '../usuario.js'
               localStorage.setItem('transacoes', JSON.stringify(transacoes));
               setTimeout(() => {
                 $("#modalEditar").attr("class", "modalOFF") 
+                  aplicarFiltroData()
                   carregarTransacoes()
                   drawChartD()
                   drawChartR()
@@ -498,6 +509,7 @@ import usuarios from '../usuario.js'
                 localStorage.setItem('transacoes', JSON.stringify(transacoes));
                 setTimeout(() => {
                   $("#modalEditar").attr("class", "modalOFF") 
+                    aplicarFiltroData()
                     carregarTransacoes()
                     drawChartD()
                     drawChartR()
@@ -635,17 +647,34 @@ import usuarios from '../usuario.js'
   }
   exibeMes()
 
-  $("#filtros").on("click", () => { 
-      
+
+
+
+  $("#dataHoje").on("input", (e) => {
+ 
+
+    const hoje = new Date();  
+    const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
+    const diaHoje = String(hoje.getDate()).padStart(2, '0');        
+    const anoHoje = hoje.getFullYear();
+
+    let dataAtual = e.target.value
+    if(dataAtual !== `${anoHoje}-${mesHoje}-${diaHoje}`){
+      sessionStorage.setItem("filtroData", dataAtual)
+      aplicarFiltroData()
+      drawChartD()
+      drawChartR()
+      drawChartT()
+      carregarTransacoes()
+    }else {
+      sessionStorage.removeItem("filtroData")
+      aplicarFiltroData()
+      drawChartD()
+      drawChartR()
+      drawChartT()
+      carregarTransacoes()
+    }
   })
-
-  $("#aplicarFiltro").on("click", () => {
-    let mes = $("#selectMes").val()
-    let pessoa = $("#selectPessoa").val()
-    console.log(mes, pessoa)
-  })
-
-
 
 
 
