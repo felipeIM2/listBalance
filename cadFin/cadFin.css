@@ -135,7 +135,9 @@ button:hover {
 table {
     height: 100%;
     width: 100%;
+    border-collapse: collapse;
 }
+
 
 td {
     /* background-color: #5555; */
@@ -143,9 +145,27 @@ td {
     height: 35px;
     border: none;
     text-align: center;
-    border: 1px solid #5555;
-    background-color: #55555527;
-    border-radius: 5px;
+    border-bottom: 1px solid #555;
+    /* border-top: 1px solid #555; */
+    /* background-color: #55555527; */
+    border-radius: 0px;
+}
+
+  thead {
+   /* background-color: red; */
+   height: 60px;
+  }
+
+tbody tr {
+  font-weight: 500;
+  transition: .5s;
+}
+
+tbody tr:hover {
+    background-color: #5555;
+    cursor: pointer;
+    /* font-weight: bold; */
+    transition: .5s;
 }
 
 #modalContent button {

@@ -10,9 +10,10 @@ function exibePessoa() {
 exibePessoa();
 
 $("#adicionar").click(() => {
-
   const descricao = $('#descricao').val();
   const valor = parseFloat($('#valor').val());
+
+  sessionStorage.setItem("valorIntegral", valor)
 
   if (!descricao || isNaN(valor)) {
     alert('Preencha todos os campos corretamente!');
@@ -62,21 +63,22 @@ $("#adicionar").click(() => {
   }
 
   let id = new Date().getTime(); 
-    
+  
   if (totalParcelas > 1 && categoria === "despesa") {
-        
     if (vencimento === "Sem Vencimento") { 
       return alert('Favor indicar o dia do vencimento no campo "Vencimento" ');
     }
 
     let valorParcela = valor / totalParcelas;
     let parcelas = [];
-      
-      
-    for (let i = 0; i < totalParcelas; i++) {
+    
+    function getMaxDiasDoMes(mes, ano) {
+      const diasPorMes = [31, (ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      return diasPorMes[mes - 1];
+    }
 
+    for (let i = 0; i < totalParcelas; i++) {
       const diaHoje = String(hoje.getDate()).padStart(2, '0');
-     
       let mesParcela = mes + i;
       let anoParcela = ano;
       
@@ -85,21 +87,14 @@ $("#adicionar").click(() => {
         mesParcela = (mesParcela - 1) % 12 + 1;
       }
 
-      let dataMesHoje = mesHoje + i;
-      let dataAnoHoje = anoHoje;
-      
-      if (mesParcela > 12) {
-        dataMesHoje += Math.floor((dataMesHoje - 1) / 12); 
-        dataAnoHoje = (dataAnoHoje - 1) % 12 + 1;
-      }
-      let mesFormatado = String(dataMesHoje).padStart(2, '0');
+      let maxDiasMes = getMaxDiasDoMes(mesParcela, anoParcela); 
+      let vencimentoDia = vencimento ? parseInt(vencimento.split('/')[0]) : 31;
 
-      mesParcela = String(mesParcela).padStart(2, '0');
-      if (vencimento) {
-        let [vencimentoDia] = vencimento.split('/').map(Number);
-        vencimento = `${vencimentoDia}/${mesParcela}/${anoParcela}`;
+      if (vencimentoDia > maxDiasMes) {
+        vencimentoDia = maxDiasMes;
       }
-      
+
+      let vencimentoFormatado = `${String(vencimentoDia).padStart(2, '0')}/${String(mesParcela).padStart(2, '0')}/${anoParcela}`;
       
       parcelas.push({
         descricao,
@@ -107,18 +102,17 @@ $("#adicionar").click(() => {
         categoria,
         tipo,
         pessoa,
-        vencimento,
+        vencimento: vencimentoFormatado,
         status: "Aberto",
-        parcela: `${i + 1}/${totalParcelas}`, 
+        parcela: `${i + 1}/${totalParcelas}`,
         parcelado: totalParcelas,
-        mesHoje: `${dataAnoHoje}-${mesFormatado}-${diaHoje}`,
+        mesHoje: `${anoHoje}-${String(mesHoje).padStart(2, '0')}-${String(diaHoje).padStart(2, '0')}`,
         id: id + i
       });
-      // return  console.log(parcelas)
     }
-    // return console.log(parcelas);
-    // Salvar as parcelas no sessionStorage para revisão
+
     sessionStorage.setItem('parcelasTemp', JSON.stringify(parcelas));
+
   } else {
     const diaHoje = String(hoje.getDate()).padStart(2, '0');  
     mesHoje = String(mesHoje).padStart(2, '0');
@@ -135,31 +129,29 @@ $("#adicionar").click(() => {
       vencimento,
       status
     };
-    //  return
-      setTimeout(() => {
-        const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-        transacoes.push(transacao);
-        localStorage.setItem('transacoes', JSON.stringify(transacoes));
-        alert("Novo Registro adicionado com Sucesso!");
-      }, 400);
+    
+    setTimeout(() => {
+      const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+      transacoes.push(transacao);
+      localStorage.setItem('transacoes', JSON.stringify(transacoes));
+      alert("Novo Registro adicionado com Sucesso!");
+    }, 400);
   }
 
-  
-    if(categoria === "despesa" && totalParcelas > 1){
-        mostrarModal();
-    }
-  
-  $('#descricao').val('');
-  $('#valor').val('');
-  $('#data').val('');
+  if(categoria === "despesa" && totalParcelas > 1){
+    mostrarModal();
+  }
+
+  if(totalParcelas < 1){
+    $('#descricao').val('');
+    $('#valor').val('');
+    $('#data').val('');
+  }
+
 });
 
-
-
-// console.log(parcelas)
-
+// Função para exibir o modal de confirmação de parcelas
 function mostrarModal() {
-
   const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
 
   $(".container").hide();
@@ -167,8 +159,8 @@ function mostrarModal() {
   let modalContent = `
     <table>
       <div style="margin-bottom:20px">
-        <button id="gravarParcelas">Gerar Parcelas</button>
-        <button id="cancelarParcelas">Cancelar</button></div>
+        <button id="gravarParcelas" style="color:green; font-weight:bold;">Gerar Parcelas</button>
+        <button id="cancelarParcelas" style="color:red; font-weight:bold;">Cancelar</button></div>
       </div>
       <thead>
         <tr>
@@ -183,7 +175,6 @@ function mostrarModal() {
   `;
 
   parcelas.forEach(parcela => {
-    // console.log(parcela)
     modalContent += `
       <tr>
         <td>${parcela.descricao}</td>
@@ -191,32 +182,31 @@ function mostrarModal() {
         <td>${parcela.vencimento}</td>
         <td>${parcela.parcelado}x</td>
         <td>${parcela.parcela}</td>
+        <td><button class="editarParcela">Editar</button></td>
       </tr>
     `;
   });
 
-  // Fechando a tabela
-  modalContent += `
-      </tbody>
-    </table>
-  `;
-
+  modalContent += `</tbody></table>`;
   setTimeout(() => {
     $('#modalContent').html(modalContent);
     $('#modal').show();
-
 
     $("#gravarParcelas").click(() => {
       const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
       const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
       transacoes.push(...parcelas);
       localStorage.setItem('transacoes', JSON.stringify(transacoes));
-      sessionStorage.removeItem('parcelasTemp'); 
+      sessionStorage.removeItem('parcelasTemp');
+
+      $('#descricao').val('');
+      $('#valor').val('');
+      $('#data').val('');
+
       alert('Parcelas gravadas com sucesso!');
       $('#modal').hide();
       $(".container").show();
     });
-
 
     $("#cancelarParcelas").on("click", () => {
       sessionStorage.removeItem('parcelasTemp'); 
@@ -224,32 +214,109 @@ function mostrarModal() {
       $(".container").show();
     });
 
+    $(document).on("click", ".editarParcela", function() {
 
+      const index = $(this).closest('tr').index();
+      const parcela = parcelas[index];
+      
+      // Função para formatar a data de 'dd/mm/yyyy' para 'yyyy-mm-dd'
+      function formatarDataParaInput(data) {
+        const [dia, mes, ano] = data.split('/');  // Divide a data em dia, mês e ano
+        return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;  // Formata para 'yyyy-mm-dd'
+      }
+      
+      // Exibe campos editáveis
+      const editModalContent = `
+        <div>
+          <label for="editDescricao">Descrição:</label>
+          <input type="text" id="editDescricao" value="${parcela.descricao}" />
+        </div>
+        <div>
+          <label for="editValor">Valor:</label>
+          <input type="number" id="editValor" value="${parcela.valor}" />
+        </div>
+        <div>
+          <label for="editVencimento">Vencimento:</label>
+          <input type="date" id="editVencimento" value="${formatarDataParaInput(parcela.vencimento)}" />
+        </div>
+        <button id="salvarEdicao">Salvar</button>
+        <button id="cancelarEdicao">Cancelar</button>
+      `;
+
+      
+      $('#modalContent').html(editModalContent);
+      
+
+      // Salvar alteração
+      $("#salvarEdicao").click(function() {
+
+        const novoDescricao = $("#editDescricao").val();
+        const novoValor = parseFloat($("#editValor").val());
+        const novoVencimento = $("#editVencimento").val();
+
+        let valorItegral = sessionStorage.getItem("valorIntegral")
+          console.log(valorItegral, novoValor)
+        if(novoValor > valorItegral || novoValor === valorItegral){
+          return alert("Favor inserir um valor de parcela menor que o valor total do registro!")
+        }
+
+
+        if (isNaN(novoValor) || !novoDescricao || !novoVencimento) {
+          alert("Preencha todos os campos corretamente!");
+          return;
+        }
+
+        // Recalcular parcelas restantes
+        const valorRestante = parcela.valor * parcela.parcelado - novoValor;
+        const valorRestantePorParcela = valorRestante / (parcela.parcelado - 1); 
+
+        const novasParcelas = [];
+        for (let i = 0; i < parcela.parcelado; i++) {
+          if (i === index) {
+            novasParcelas.push({
+              ...parcela,
+              descricao: novoDescricao,
+              valor: novoValor,
+              vencimento: novoVencimento,
+            });
+          } else {
+            novasParcelas.push({
+              ...parcela,
+              valor: valorRestantePorParcela,
+            });
+          }
+        }
+
+        sessionStorage.setItem('parcelasTemp', JSON.stringify(novasParcelas));
+        $('#modal').hide();
+        mostrarModal();
+        alert("Parcela editada com sucesso!");
+
+      });
+
+
+      $("#cancelarEdicao").click(function() {
+        $('#modal').hide();
+        mostrarModal();
+      });
+    });
   }, 400);
 }
-
 
 $("#cancelar").click(() => location = "../index.html");
 
 $(document).ready(() => {
   $('body').append(`
     <div id="modal" style="display:none">
-        <h1 style="color:white; font-size:40px">
-          Gerar Parcelas
-        </h1>
-      <div id="modalContent">
-
-      </div>
-
+      <h1 style="color:white; font-size:40px">Gerar Parcelas</h1>
+      <div id="modalContent"></div>
     </div>
   `);
 });
 
-
 $("#cancelar").click(() => location = "../index.html");
 
 const parcelado = $("#parcelado");
-
 for (let i = 1; i <= 36; i++) {
   const option = $("<option></option>").val(i).text(`Parcelado em ${i}x`);
   parcelado.append(option);
@@ -260,7 +327,6 @@ const tipoSelect = $("#tipo");
 
 categoriaSelect.change(function() {
   liberarParcelas();
-  // console.log(categoriaSelect.val());
   if (categoriaSelect.val() === "despesa") {
     $("#dataForm").css("opacity", "1");
     $("#parcelForm").css("opacity", "1");
