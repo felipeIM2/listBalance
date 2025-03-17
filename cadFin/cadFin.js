@@ -26,7 +26,7 @@ $("#adicionar").click(() => {
   let pessoa = $("#pessoa").val();
 
   const hoje = new Date();
-  let mesHoje = hoje.getMonth() + 1; 
+  let mesHoje = hoje.getMonth() + 1;
   const anoHoje = hoje.getFullYear();
 
   let check = $("#checkData");
@@ -118,7 +118,8 @@ $("#adicionar").click(() => {
         parcela: `${i + 1}/${totalParcelas}`,
         parcelado: totalParcelas,
         mesHoje: `${dataAnoHoje}-${mesFormatado}-${diaHoje}`,
-        id: id + i
+        id: id + i,
+        alterado:false
       });
     }
 
@@ -204,6 +205,7 @@ function mostrarModal() {
     $('#modal').show();
 
     $("#gravarParcelas").click(() => {
+
       const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
       const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
       transacoes.push(...parcelas);
@@ -260,75 +262,84 @@ function mostrarModal() {
       $('#modalContent').html(editModalContent);
       
 
-      // Salvar alteração
       $("#salvarEdicao").click(function() {
-// e.preventdefault()
+
         const novoDescricao = $("#editDescricao").val();
         const novoValor = parseFloat($("#editValor").val());
         const novoVencimento = $("#editVencimento").val();
-
-        let valorItegral = sessionStorage.getItem("valorIntegral")
-          // console.log(valorItegral, novoValor)
-
-        if(Number(novoValor) >= Number(valorItegral)){
-           return alert("Favor inserir um valor de parcela menor que o valor total do registro!")
+    
+        let valorIntegral = sessionStorage.getItem("valorIntegral");
+    
+        // Verificar se o valor inserido é menor que o valor integral
+        if (Number(novoValor) >= Number(valorIntegral)) {
+            return alert("Favor inserir um valor de parcela menor que o valor total do registro!");
         }
-
-
+    
         if (isNaN(novoValor) || !novoDescricao || !novoVencimento) {
-          alert("Preencha todos os campos corretamente!");
-          return;
+            alert("Preencha todos os campos corretamente!");
+            return;
         }
-
-
-       
-          const [dia, mes, ano] = novoVencimento.split('-'); 
-
-          const diaFormatado = dia.padStart(2, '0')
-          const mesFormatado = mes.padStart(2, '0') 
-
-          let vencimentoFormatado = `${ano}/${mesFormatado}/${diaFormatado}`;
-              // console.log(vencimentoFormatado)
-// return;
+    
+        const [dia, mes, ano] = novoVencimento.split('-');
+        const diaFormatado = dia.padStart(2, '0');
+        const mesFormatado = mes.padStart(2, '0');
+        const vencimentoFormatado = `${ano}/${mesFormatado}/${diaFormatado}`;
+    
         // Recalcular parcelas restantes
-        const valorRestante = parcela.valor * parcela.parcelado - novoValor;
-        const valorRestantePorParcela = valorRestante / (parcela.parcelado - 1); 
+        const valorRestante = valorIntegral - novoValor; // valor integral menos o valor da parcela alterada
 
-        console.log(valorRestante,"rest", valorRestantePorParcela, "restPPC", novoValor, "novoValor", valorItegral)
-        // return;
+        let valorRestantePorParcela;
+        if(!parcela.alterado){
+          valorRestantePorParcela =  valorRestante / (parcela.parcelado - 1); // rateio entre as parcelas restantes
+        }
+       
+    
         const novasParcelas = [];
         for (let i = 0; i < parcela.parcelado; i++) {
-          if (i === index) {
+
+          if (i === index) { // Se for a parcela que foi alterada
+            console.log("1")
             novasParcelas.push({
-              ...parcela,
-              descricao: novoDescricao,
-              valor: novoValor,
-              vencimento: vencimentoFormatado,
+                ...parcela,
+                descricao: novoDescricao,
+                valor: novoValor, // valor da parcela alterada
+                vencimento: vencimentoFormatado,
+                alterado: true
             });
-          } else {
-            novasParcelas.push({
-              ...parcela,
-              valor: valorRestantePorParcela,
-            });
-          }
+        } else {
+          console.log("0")
+            // Verifica se a parcela não foi alterada anteriormente
+            if (!parcela.alterado) {
+                novasParcelas.push({
+                    ...parcela,
+                    valor: valorRestantePorParcela, // valor redistribuído para as parcelas restantes
+                });
+            } else {
+                // Se a parcela já foi alterada, mantém o valor original
+                novasParcelas.push({
+                    ...parcela
+                });
+            }
         }
 
-        // return console.log(novasParcelas)
-        sessionStorage.setItem('parcelasTemp', JSON.stringify(novasParcelas));
-        setTimeout(() => {
-          $('#modal').hide();
-          mostrarModal();
-          alert("Parcela editada com sucesso!");
-        }, 600);
+        }
 
-
-      });
+        console.log(novasParcelas)
+         sessionStorage.setItem('parcelasTemp', JSON.stringify(novasParcelas));
+    
+        // setTimeout(() => {
+        //     $('#modal').hide();
+        //     mostrarModal();
+        //     //alert("Parcela editada com sucesso!");
+        // }, 600);
+    });
 
 
       $("#cancelarEdicao").click(function() {
         $('#modal').hide();
         mostrarModal();
       });
+
     });
   }, 400);
 }
