@@ -78,7 +78,9 @@ $("#adicionar").click(() => {
     }
 
     for (let i = 0; i < totalParcelas; i++) {
+
       const diaHoje = String(hoje.getDate()).padStart(2, '0');
+
       let mesParcela = mes + i;
       let anoParcela = ano;
       
@@ -96,6 +98,15 @@ $("#adicionar").click(() => {
 
       let vencimentoFormatado = `${String(vencimentoDia).padStart(2, '0')}/${String(mesParcela).padStart(2, '0')}/${anoParcela}`;
       
+      let dataMesHoje = mesHoje + i;
+      let dataAnoHoje = anoHoje;
+
+      if (mesParcela > 12) {
+        dataMesHoje += Math.floor((dataMesHoje - 1) / 12); 
+        dataAnoHoje = (dataAnoHoje - 1) % 12 + 1;
+      }
+      let mesFormatado = String(dataMesHoje).padStart(2, '0');
+
       parcelas.push({
         descricao,
         valor: Number(valorParcela.toFixed(2)),
@@ -106,7 +117,7 @@ $("#adicionar").click(() => {
         status: "Aberto",
         parcela: `${i + 1}/${totalParcelas}`,
         parcelado: totalParcelas,
-        mesHoje: `${anoHoje}-${String(mesHoje).padStart(2, '0')}-${String(diaHoje).padStart(2, '0')}`,
+        mesHoje: `${dataAnoHoje}-${mesFormatado}-${diaHoje}`,
         id: id + i
       });
     }
@@ -142,7 +153,7 @@ $("#adicionar").click(() => {
     mostrarModal();
   }
 
-  if(totalParcelas < 1){
+  if(totalParcelas <= 1){
     $('#descricao').val('');
     $('#valor').val('');
     $('#data').val('');
@@ -227,20 +238,22 @@ function mostrarModal() {
       
       // Exibe campos editáveis
       const editModalContent = `
-        <div>
-          <label for="editDescricao">Descrição:</label>
-          <input type="text" id="editDescricao" value="${parcela.descricao}" />
+      <div class="editarParcela">
+          <div>
+            <label for="editDescricao">Descrição:</label>
+            <input type="text" id="editDescricao" value="${parcela.descricao}" />
+          </div>
+          <div>
+            <label for="editValor">Valor:</label>
+            <input type="number" id="editValor" value="${parcela.valor}" />
+          </div>
+          <div>
+            <label for="editVencimento">Vencimento:</label>
+            <input type="date" id="editVencimento" value="${formatarDataParaInput(parcela.vencimento)}" />
+          </div>
+          <button id="salvarEdicao">Salvar</button>
+          <button id="cancelarEdicao">Cancelar</button>
         </div>
-        <div>
-          <label for="editValor">Valor:</label>
-          <input type="number" id="editValor" value="${parcela.valor}" />
-        </div>
-        <div>
-          <label for="editVencimento">Vencimento:</label>
-          <input type="date" id="editVencimento" value="${formatarDataParaInput(parcela.vencimento)}" />
-        </div>
-        <button id="salvarEdicao">Salvar</button>
-        <button id="cancelarEdicao">Cancelar</button>
       `;
 
       
@@ -249,15 +262,16 @@ function mostrarModal() {
 
       // Salvar alteração
       $("#salvarEdicao").click(function() {
-
+// e.preventdefault()
         const novoDescricao = $("#editDescricao").val();
         const novoValor = parseFloat($("#editValor").val());
         const novoVencimento = $("#editVencimento").val();
 
         let valorItegral = sessionStorage.getItem("valorIntegral")
-          console.log(valorItegral, novoValor)
-        if(novoValor > valorItegral || novoValor === valorItegral){
-          return alert("Favor inserir um valor de parcela menor que o valor total do registro!")
+          // console.log(valorItegral, novoValor)
+
+        if(Number(novoValor) >= Number(valorItegral)){
+           return alert("Favor inserir um valor de parcela menor que o valor total do registro!")
         }
 
 
@@ -266,10 +280,22 @@ function mostrarModal() {
           return;
         }
 
+
+       
+          const [dia, mes, ano] = novoVencimento.split('-'); 
+
+          const diaFormatado = dia.padStart(2, '0')
+          const mesFormatado = mes.padStart(2, '0') 
+
+          let vencimentoFormatado = `${ano}/${mesFormatado}/${diaFormatado}`;
+              // console.log(vencimentoFormatado)
+// return;
         // Recalcular parcelas restantes
         const valorRestante = parcela.valor * parcela.parcelado - novoValor;
         const valorRestantePorParcela = valorRestante / (parcela.parcelado - 1); 
 
+        console.log(valorRestante,"rest", valorRestantePorParcela, "restPPC", novoValor, "novoValor", valorItegral)
+        // return;
         const novasParcelas = [];
         for (let i = 0; i < parcela.parcelado; i++) {
           if (i === index) {
@@ -277,7 +303,7 @@ function mostrarModal() {
               ...parcela,
               descricao: novoDescricao,
               valor: novoValor,
-              vencimento: novoVencimento,
+              vencimento: vencimentoFormatado,
             });
           } else {
             novasParcelas.push({
@@ -287,10 +313,14 @@ function mostrarModal() {
           }
         }
 
+        // return console.log(novasParcelas)
         sessionStorage.setItem('parcelasTemp', JSON.stringify(novasParcelas));
-        $('#modal').hide();
-        mostrarModal();
-        alert("Parcela editada com sucesso!");
+        setTimeout(() => {
+          $('#modal').hide();
+          mostrarModal();
+          alert("Parcela editada com sucesso!");
+        }, 600);
+
 
       });
 

@@ -5,7 +5,7 @@ let user = [
     },
     {
         "id":2,
-        "nome":"Nat"
+        "nome":"null"
     }
 ]
 
