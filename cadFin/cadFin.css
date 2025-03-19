@@ -162,7 +162,7 @@ tbody tr {
 }
 
 tbody tr:hover {
-    background-color: #5555;
+    background-color: #00000031;
     cursor: pointer;
     /* font-weight: bold; */
     transition: .5s;

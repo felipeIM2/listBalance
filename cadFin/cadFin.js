@@ -164,7 +164,8 @@ $("#adicionar").click(() => {
 
 // Função para exibir o modal de confirmação de parcelas
 function mostrarModal() {
-  const parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
+  
+  let parcelas = JSON.parse(sessionStorage.getItem('parcelasTemp'));
 
   $(".container").hide();
 
@@ -173,7 +174,6 @@ function mostrarModal() {
       <div style="margin-bottom:20px">
         <button id="gravarParcelas" style="color:green; font-weight:bold;">Gerar Parcelas</button>
         <button id="cancelarParcelas" style="color:red; font-weight:bold;">Cancelar</button></div>
-        <a href="../test/index.html"><button>Teste</button></a>
       </div>
       <thead>
         <tr>
@@ -195,7 +195,7 @@ function mostrarModal() {
         <td>${parcela.vencimento}</td>
         <td>${parcela.parcelado}x</td>
         <td>${parcela.parcela}</td>
-        <td><button class="editarParcela">Editar</button></td>
+        <td><button class="editarParcela" id="editarParcela">Editar</button></td>
       </tr>
     `;
   });
@@ -228,11 +228,12 @@ function mostrarModal() {
       $(".container").show();
     });
 
-    $(document).on("click", ".editarParcela", function() {
-
+    $(".editarParcela").on("click", function(e) {
+      
       const index = $(this).closest('tr').index();
       const parcela = parcelas[index];
-      
+      // console.log(parcelas)
+    
       // Função para formatar a data de 'dd/mm/yyyy' para 'yyyy-mm-dd'
       function formatarDataParaInput(data) {
         const [dia, mes, ano] = data.split('/');  // Divide a data em dia, mês e ano
@@ -240,7 +241,7 @@ function mostrarModal() {
       }
       
       // Exibe campos editáveis
-      const editModalContent = `
+       const editModalContent = `
       <div class="editarParcela">
           <div>
             <label for="editDescricao">Descrição:</label>
@@ -248,7 +249,7 @@ function mostrarModal() {
           </div>
           <div>
             <label for="editValor">Valor:</label>
-            <input type="number" id="editValor" value="${parcela.valor}" />
+            <input type="number" id="editValor" value="${parcela.valor.toFixed(2)}" />
           </div>
           <div>
             <label for="editVencimento">Vencimento:</label>
@@ -285,46 +286,63 @@ function mostrarModal() {
         const diaFormatado = dia.padStart(2, '0');
         const mesFormatado = mes.padStart(2, '0');
         const vencimentoFormatado = `${ano}/${mesFormatado}/${diaFormatado}`;
+
+        let validaParcelasAlteradas = parcelas.filter(p => p.alterado)
+        let validaSomaAlteradas = validaParcelasAlteradas.reduce((acc, p) => acc + p.valor, 0)
       
-        // Recalcular parcelas restantes
-        const valorRestante = valorIntegral - novoValor; // valor integral menos o valor da parcela alterada
-        
-        let valorRestantePorParcela = valorRestante / (parcela.parcelado - 1); // rateio entre as parcelas restantes
-      
-        const novasParcelas = [];
-        
-        for (let i = 0; i < parcela.parcelado; i++) {
-          
-          if (i === index) { // Se for a parcela que foi alterada
-            
-            novasParcelas.push({
-              ...parcela,
+        if (index !== -1) {
+
+
+          if(parcelas[index].valor === novoValor){
+            parcelas[index] = {
+              ...parcelas[index],
               descricao: novoDescricao,
-              valor: novoValor, // valor da parcela alterada
+              valor: novoValor,
+              vencimento: vencimentoFormatado,
+            };
+          }else {
+            parcelas[index] = {
+              ...parcelas[index],
+              descricao: novoDescricao,
+              valor: novoValor,
               vencimento: vencimentoFormatado,
               alterado: true
-            });
-      
-          } else {
-            
-            // Se a parcela não foi alterada (alterado: false), faz a redistribuição do valor
-            if (parcela.alterado === false) {
-              novasParcelas.push({
-                ...parcela,
-                valor: valorRestantePorParcela, // valor redistribuído para as parcelas restantes
-              });
-            } else {
-              // Se a parcela já foi alterada, mantém o valor original
-              novasParcelas.push({
-                ...parcela
-              });
-            }
+            };
           }
+
+
+                  
+          let parcelasAlteradas = parcelas.filter(p => p.alterado)
+          let somaAlteradas = parcelasAlteradas.reduce((acc, p) => acc + p.valor, 0)
+
+          let parcelasNaoAlteradas = parcelas.filter(p => !p.alterado).length;
+          
+          let valorRestante = valorIntegral - somaAlteradas; 
+          let valorRestantePorParcela = valorRestante / parcelasNaoAlteradas;
+
+          let validaValor = somaAlteradas + novoValor
+          // Validadores 
+
+          if(valorRestantePorParcela === Infinity){return alert(`Valor a ser inserido deve ser superior a ${novoValor}`)}
+          if(validaValor > valorIntegral){ return alert(`O valor maximo a ser inserido é de ${valorIntegral - validaSomaAlteradas}`)}
+
+
+            parcelas = parcelas.map((p, i) => {
+              
+            if (i !== index && !p.alterado) {
+              return {
+                ...p,
+                valor: valorRestantePorParcela
+              };
+            }
+            return p; 
+          });
+
         }
-      
-        // Armazenar as parcelas alteradas no sessionStorage
-        sessionStorage.setItem('parcelasTemp', JSON.stringify(novasParcelas));
-      
+
+        // console.log(parcelas);
+        
+        sessionStorage.setItem('parcelasTemp', JSON.stringify(parcelas));
         setTimeout(() => {
           $('#modal').hide();
           mostrarModal();
