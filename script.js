@@ -23,6 +23,8 @@ import usuarios from '../usuario.js'
      dataAtual.val(`${anoHoje}-${mesHoje}-${diaHoje}`)
      let verifyData = sessionStorage.getItem("filtroData")
      if(verifyData) sessionStorage.removeItem("filtroData")
+
+      
   })
 
 

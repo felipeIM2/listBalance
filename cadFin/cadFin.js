@@ -171,7 +171,7 @@ function mostrarModal() {
 
   let modalContent = `
     <table>
-      <div style="margin-bottom:20px">
+      <div style="margin-bottom:15px">
         <button id="gravarParcelas" style="color:green; font-weight:bold;">Gerar Parcelas</button>
         <button id="cancelarParcelas" style="color:red; font-weight:bold;">Cancelar</button></div>
       </div>
@@ -195,7 +195,7 @@ function mostrarModal() {
         <td>${parcela.vencimento}</td>
         <td>${parcela.parcelado}x</td>
         <td>${parcela.parcela}</td>
-        <td><button class="editarParcela" id="editarParcela">Editar</button></td>
+        <td><button class="editarParcela"><i class="fas fa-edit" id=""></i></button></td>
       </tr>
     `;
   });
@@ -228,11 +228,27 @@ function mostrarModal() {
       $(".container").show();
     });
 
-    $(".editarParcela").on("click", function(e) {
-      
+    $(".editarParcela").on("click", function() {
+
+
       const index = $(this).closest('tr').index();
       const parcela = parcelas[index];
-      // console.log(parcelas)
+
+      let valorIntegral = sessionStorage.getItem("valorIntegral");
+      
+      let parcelasAlteradas = parcelas.filter(p => p.alterado);
+      let somaAlteradas = parcelasAlteradas.reduce((acc, p) => acc + p.valor, 0);
+      let validaParcela = parcela.valor + somaAlteradas;
+
+        
+      if(validaParcela === Number(valorIntegral) ) {
+
+        alert("Essa é a parcela referencia, seu valor é bloqueado!")
+
+       setTimeout(() => {
+        $("#editValor").attr("disabled", true);
+       }, 200);
+      }
     
       // Função para formatar a data de 'dd/mm/yyyy' para 'yyyy-mm-dd'
       function formatarDataParaInput(data) {
@@ -255,6 +271,9 @@ function mostrarModal() {
             <label for="editVencimento">Vencimento:</label>
             <input type="date" id="editVencimento" value="${formatarDataParaInput(parcela.vencimento)}" />
           </div>
+
+        </div>
+        <div class="editarParcelaButton">
           <button id="salvarEdicao">Salvar</button>
           <button id="cancelarEdicao">Cancelar</button>
         </div>
@@ -263,6 +282,7 @@ function mostrarModal() {
       
       $('#modalContent').html(editModalContent);
       
+
 
       $("#salvarEdicao").click(function() {
 
@@ -287,9 +307,8 @@ function mostrarModal() {
         const mesFormatado = mes.padStart(2, '0');
         const vencimentoFormatado = `${ano}/${mesFormatado}/${diaFormatado}`;
 
-        let validaParcelasAlteradas = parcelas.filter(p => p.alterado)
-        let validaSomaAlteradas = validaParcelasAlteradas.reduce((acc, p) => acc + p.valor, 0)
-      
+
+
         if (index !== -1) {
 
 
@@ -320,12 +339,7 @@ function mostrarModal() {
           let valorRestante = valorIntegral - somaAlteradas; 
           let valorRestantePorParcela = valorRestante / parcelasNaoAlteradas;
 
-          let validaValor = somaAlteradas + novoValor
-          // Validadores 
-
           if(valorRestantePorParcela === Infinity){return alert(`Valor a ser inserido deve ser superior a ${novoValor}`)}
-          if(validaValor > valorIntegral){ return alert(`O valor maximo a ser inserido é de ${valorIntegral - validaSomaAlteradas}`)}
-
 
             parcelas = parcelas.map((p, i) => {
               
