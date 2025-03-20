@@ -538,40 +538,28 @@ import usuarios from '../usuario.js'
 
   $("#outros").on("click", () => {
 
-     let item = $(".opcoes")
-     let estilos = window.getComputedStyle(item)
-     let display = estilos.getPropertyValue("display")
-     console.log("")
 
-     if(display === "none"){
+    let item = $(".opcoes")
+    // console.log(item[0])
+    let estilos = window.getComputedStyle(item[0])
+    let display = estilos.getPropertyValue("display")
+      
+    if(display === "none"){
 
-      item.style.cssText = "display:block; opacity:0; transition:.4s;"
+      item[0].style.cssText = "display:block; opacity:0; transition:.4s;"
       setTimeout(() => {
-         item.style.cssText = "display:block; opacity:1; transition:.4s;"
+        item[0].style.cssText = "display:block; opacity:1; transition:.4s;"
       }, 200);
 
-     }else {
-        item.style.cssText = "display:block; opacity:0; transition:.4s;"
+    }else {
+        item[0].style.cssText = "display:block; opacity:0; transition:.4s;"
         setTimeout(() => {
-          item.style.cssText = "display:none; opacity:0; transition:.4s;"
-       }, 200);
-     }
+          item[0].style.cssText = "display:none; opacity:0; transition:.4s;"
+      }, 200);
+    }
     
   })
 
-  $("#filtro").on("click", () => {  
-    let filtro = $(".pesquisa-container");
-    if (filtro.length === 0) {
-      $(".pesquisa-containerOn").each(function() {
-        $(this).removeClass("pesquisa-containerOn").addClass("pesquisa-container");
-      });
-    }
-    filtro.each(function() {
-      if ($(this).hasClass('pesquisa-container')) {
-        $(this).removeClass('pesquisa-container').addClass('pesquisa-containerOn');
-      }
-    });
-  });
   
   $('#downloadJson').on('click', function() {
 
@@ -600,7 +588,7 @@ import usuarios from '../usuario.js'
                 localStorage.setItem("transacoes", JSON.stringify(dados))
 
                 setTimeout(() => {
-                  
+                  location.reload()
                 }, 800);
 
 
@@ -615,11 +603,6 @@ import usuarios from '../usuario.js'
         alert("Por favor, selecione um arquivo JSON válido.");
     }
   });
-
-  $("#valorCelula").on("input", (e) => {
-    let valor = e.target.value
-    e.target.value = valor.replace(/[^0-9,\.]/g, '')
-  })
 
   function exibePessoa() {
     let pessoa =  $("#selectPessoa")
@@ -654,7 +637,6 @@ import usuarios from '../usuario.js'
 
   $("#dataHoje").on("input", (e) => {
  
-
     const hoje = new Date();  
     const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
     const diaHoje = String(hoje.getDate()).padStart(2, '0');        

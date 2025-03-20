@@ -172,8 +172,8 @@ function mostrarModal() {
   let modalContent = `
     <table>
       <div style="margin-bottom:15px">
-        <button id="gravarParcelas" style="color:green; font-weight:bold;">Gerar Parcelas</button>
-        <button id="cancelarParcelas" style="color:red; font-weight:bold;">Cancelar</button></div>
+        <button id="gravarParcelas" style="color: #4CAF50; font-weight:bold;">Gerar Parcelas</button>
+        <button id="cancelarParcelas" style="color:rgb(202, 2, 2); font-weight:bold;">Cancelar</button></div>
       </div>
       <thead>
         <tr>
@@ -274,8 +274,34 @@ function mostrarModal() {
 
         </div>
         <div class="editarParcelaButton">
-          <button id="salvarEdicao">Salvar</button>
-          <button id="cancelarEdicao">Cancelar</button>
+          <button id="salvarEdicao" style="
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color:white;
+            font-weight: bold;
+            border: none;
+            border-radius:5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: .2s;"
+           >
+           
+           Salvar</button>
+
+          <button id="cancelarEdicao"  style="
+            padding: 10px 20px;
+            background-color:rgb(167, 3, 3);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius:5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: .2s;
+            "
+           >
+          Cancelar</button>
+
         </div>
       `;
 
