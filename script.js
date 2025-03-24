@@ -62,21 +62,19 @@ import usuarios from '../usuario.js'
   google.charts.setOnLoadCallback(drawChartT);
   
   function drawChartR() {
-    let num1;
-    let num2;
-    let num3;
+    let num1, num2, num3;
     
+    // Calculando as receitas fixas, variáveis e totais
     if(transacoes){
       let somaReceitasFixas = transacoes.reduce((total, e) => {
-        // console.log(e.mesHoje.includes(filtroData))
         if (e.categoria === 'receita' && e.tipo === 'fixa' && e.mesHoje.includes(filtroData)) {
           return total + parseFloat(e.valor);
         }
         return total;
       }, 0); 
-      num1  = somaReceitasFixas
+      num1 = somaReceitasFixas;
     }
-      
+    
     if(transacoes){
       let somaReceitasVariaveis = transacoes.reduce((total, e) => {
         if (e.categoria === 'receita' && e.tipo === 'variavel' && e.mesHoje.includes(filtroData)) {
@@ -84,41 +82,42 @@ import usuarios from '../usuario.js'
         }
         return total;
       }, 0); 
-      num2 = somaReceitasVariaveis
+      num2 = somaReceitasVariaveis;
     }
+  
     if(transacoes){
       let somaReceitas = transacoes.reduce((total, e) => {
         if(e.categoria === "receita" && e.mesHoje.includes(filtroData)){
           return total + parseFloat(e.valor); 
         }
-      return total
+        return total;
       }, 0); 
-      num3 = somaReceitas
+      num3 = somaReceitas;
     }
   
-    document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3.toFixed(2) || 0}`
-  
+    document.getElementById("totalR").innerHTML = `Entradas: R$ ${num3.toFixed(2) || 0}`;
+    
     let data = google.visualization.arrayToDataTable([
       ['Task', ''],
-      ['Fixa',   num1],
-      ['Variavel',   num2],
-      
+      ['Fixa', num1],
+      ['Variavel', num2],
     ]);
   
     let options = {
       title: 'Receitas',
       is3D: true,
+      colors: ['#66BB6A', '#388E3C'], // Verde para as receitas
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
     chart.draw(data, options);
   }
   
-  function drawChartD() {
-    let num1;
-    let num2;
-    let num3;
   
+  function drawChartD() {
+    let num1, num2, num3;
+    
+    // Calculando as despesas fixas, variáveis e totais
     if(transacoes){
       let somaDespesasFixas = transacoes.reduce((total, e) => {
         if (e.categoria === 'despesa' && e.tipo === 'fixa' && e.mesHoje.includes(filtroData)) {
@@ -126,9 +125,9 @@ import usuarios from '../usuario.js'
         }
         return total;
       }, 0); 
-      num1 = somaDespesasFixas
+      num1 = somaDespesasFixas;
     }
-  
+    
     if(transacoes){
       let somaDespesasVariaveis = transacoes.reduce((total, e) => {
         if (e.categoria === 'despesa' && e.tipo === 'variavel' && e.mesHoje.includes(filtroData)) {
@@ -136,44 +135,42 @@ import usuarios from '../usuario.js'
         }
         return total;
       }, 0); 
-      num2 = somaDespesasVariaveis
+      num2 = somaDespesasVariaveis;
     }
-  
+    
     if(transacoes){
       let somaDespesas = transacoes.reduce((total, e) => {
         if(e.categoria === "despesa" && e.mesHoje.includes(filtroData)){
           return total + parseFloat(e.valor); 
         }
-      return total
+        return total;
       }, 0); 
-  
-      num3 = somaDespesas
+      num3 = somaDespesas;
     }
   
-    document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3.toFixed(2) || 0}`
-  
+    document.getElementById("totalD").innerHTML = `Saídas: R$ ${num3.toFixed(2) || 0}`;
+    
     let data = google.visualization.arrayToDataTable([
       ['Task', ''],
-      ['Fixa',   num1],
-      ['Variavel',   num2],
-      
+      ['Fixa', num1],
+      ['Variavel', num2],
     ]);
   
     let options = {
       title: 'Despesas',
       is3D: true,
+      colors: ['#D32F2F', '#C2185B'], // Vermelho para as despesas
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
     chart.draw(data, options);
   }
   
-  function drawChartT() {
-    let num1;
-    let num2;
-    let num3;
-    let num4;
   
+  function drawChartT() {
+    let num1, num2, num3, num4;
+    
+    // Calculando o lucro/negativo e entradas
     if(transacoes){
       let somaTotal = transacoes.reduce((total, e) => {
         if (e.categoria === "receita" && e.mesHoje.includes(filtroData)) {
@@ -182,57 +179,57 @@ import usuarios from '../usuario.js'
           total.despesas += e.valor; 
         }
         return total; 
-  
       }, { receitas: 0, despesas: 0 }); 
-      
-      let totalFinal = somaTotal.receitas - somaTotal.despesas
   
+      let totalFinal = somaTotal.receitas - somaTotal.despesas;
+      
       if(totalFinal < 0){
-        num3 = (totalFinal + (- totalFinal) * 2)
-      }else {
-        num1 = totalFinal
+        num3 = (totalFinal + (- totalFinal) * 2); // Ajuste para negativo
+      } else {
+        num1 = totalFinal; // Lucro
       }
     }
   
     if(transacoes){
       let somaRedutor = transacoes.reduce((total, e) => {
-        if(e.categoria === "despesa" && e.mesHoje.includes(filtroData) && e.status === "Aberto" || e.status === "Vencido" ){
+        if(e.categoria === "despesa" && e.mesHoje.includes(filtroData) && (e.status === "Aberto" || e.status === "Vencido")){
           return total + parseFloat(e.valor); 
         }
-      return total
+        return total;
       }, 0); 
-      num2 = somaRedutor
+      num2 = somaRedutor;
     }
-  
+    
     if(transacoes){
       let somaReceitas = transacoes.reduce((total, e) => {
         if(e.categoria === "receita" && e.mesHoje.includes(filtroData)){
           return total + parseFloat(e.valor); 
         }
-      return total
+        return total;
       }, 0); 
       
-      num4 = somaReceitas
+      num4 = somaReceitas;
     }
   
-    document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`
-  
+    document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`;
+    
     let data = google.visualization.arrayToDataTable([
       ['Task', ''],
-      ['Lucro',   num1],  
-      ['Negativo',   num3],
-      ['Entrada',   num4],
-      
+      ['Lucro', num1],  
+      ['Negativo', num3],
+      ['Entrada', num4],
     ]);
   
     let options = {
       title: 'Lucro/Negativo',
       is3D: true,
+      colors: ['#66BB6A', '#FF7043', '#1E88E5'], // Verde para lucro, laranja para negativo, azul para entrada
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
     chart.draw(data, options);
   }
+  
   
 
 
