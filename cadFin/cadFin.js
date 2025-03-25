@@ -108,6 +108,8 @@ $("#adicionar").click(() => {
       let mesFormatado = String(dataMesHoje).padStart(2, '0');
 
       parcelas.push({
+        id: id + i,
+        idparcela: id + totalParcelas,
         descricao,
         valor: Number(valorParcela.toFixed(2)),
         categoria,
@@ -118,11 +120,10 @@ $("#adicionar").click(() => {
         parcela: `${i + 1}/${totalParcelas}`,
         parcelado: totalParcelas,
         mesHoje: `${dataAnoHoje}-${mesFormatado}-${diaHoje}`,
-        id: id + i,
         alterado:false
       });
     }
-
+     
     sessionStorage.setItem('parcelasTemp', JSON.stringify(parcelas));
 
   } else {

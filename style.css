@@ -456,17 +456,19 @@ td {
 
 
   .pesquisa-containerOn {
-    
     transition: width .6s;
     animation: piscar2 1s ease-in; 
   }
 
   .pesquisa-containerOn input {
-    width: 100px;
+    width: 80px;
+    font-size: 12px;
   }
 
   .pesquisa-containerOn select {
-    width: 100px;
+    width: 80px;
+    cursor: pointer;
+    font-size: 12px;
   }
 
   #limpar {
@@ -538,24 +540,29 @@ td {
     font-size: 20px;
   }
 
-  .dataHoje {
-    text-align: center;
-    color: white;
-    margin-top: 30px;
+/* Estilos para .dataHoje */
+.dataHoje {
+  position: fixed;  /* Fixa o elemento */
+  bottom: 0;  /* Fixa a 0px do fundo da página */
+  text-align: center;
+  left: 1px;
+  color: white;
+  padding-bottom: 40px;  /* Adiciona um pouco de espaço na parte inferior */
+}
 
-  }
+/* Estilos para o label */
+.dataHoje label {
+  margin: 0px;
+  margin-bottom: 5px;
+  margin-right: 20px;
+  font-size: 20px;
+}
 
-  .dataHoje label {
-    margin: 0px;
-    margin-bottom: 5px;
-    margin-right: 20px;
-    font-size: 20px;
-  }
-
-  .dataHoje input {
-    text-align: center;
-    background-color: transparent;
-    border: transparent;
-    color: white;
-    font-size: 15px;
-  }
+/* Estilos para o input */
+.dataHoje input {
+  text-align: center;
+  background-color: transparent;
+  border: transparent;
+  color: white;
+  font-size: 19px;
+}

@@ -19,10 +19,7 @@
 
     <div class="menu-lateral">
 
-      <div class="dataHoje">
-        <label for="dataHoje">Data atual:</label>
-        <input type="date" id="dataHoje" style="opacity: 0;">
-      </div>
+
 
 
       <div class="menu-opcoes">
@@ -30,10 +27,10 @@
         <ul > 
 
           <li><a href="./cadFin/">Novo Registro</a></li>
-          <li id="outros"><a >Outros</a></li>
+          <!-- <li id="outros"><a >Outros</a></li> -->
           <div>
             
-            <div class="opcoes" >
+            <!-- <div class="opcoes" >
               
               <label for="downloadJson">Download Json</label>
               <button id="downloadJson"></button>
@@ -42,39 +39,23 @@
               <input type="file" accept=".json" id="uploadFile"></input>
         
               
-            </div>
+            </div> -->
+            
           </div>
            
-
         </ul>
 
       </div>
 
-
-
+      <div class="dataHoje">
+        <!-- <label for="dataHoje">Data atual:</label> -->
+        <input type="date" id="dataHoje" style="opacity: 0;">
+      </div>
 
     </div>
 
     <div class="ajuste-tela" > 
       
-      <!-- <div id="modalFiltro" class="modalFiltroOff">
-
-        <div style="display: flex; margin-bottom: 75%;">
-          <select name="mes" id="selectMes">
-            <option value="">Selecionar mes</option>
-          </select>
-          <select name="pessoa" id="selectPessoa">
-            <option value="">Selecionar pessoa</option>
-          </select>
-        </div>
-         <div class="modalButton">
-           <button>Voltar</button>
-          <button id="aplicarFiltro">Aplicar</button>
-         </div>
-
-      </div> -->
-
-
       <div class="campo-adicional" >
         <h3>Totalizadores:</h3>
         <div class="totalizadores" style="opacity: 0;" >
@@ -204,12 +185,8 @@
     </div>
   </div>
 
-
-
   <script src="./script.js" type="module"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
 
 </body>
 

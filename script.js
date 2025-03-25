@@ -107,6 +107,7 @@ import usuarios from '../usuario.js'
       title: 'Receitas',
       is3D: true,
       colors: ['#66BB6A', '#388E3C'], // Verde para as receitas
+      legend: 'none'
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartR'));
@@ -159,7 +160,8 @@ import usuarios from '../usuario.js'
     let options = {
       title: 'Despesas',
       is3D: true,
-      colors: ['#D32F2F', '#C2185B'], // Vermelho para as despesas
+      colors: ['#D32F2F', '#940707'], // Vermelho para as despesas
+      legend: 'none'
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartD'));
@@ -212,6 +214,10 @@ import usuarios from '../usuario.js'
     }
   
     document.getElementById("totalN").innerHTML = `Pendente: R$ ${num2.toFixed(2) || 0}`;
+
+    if(num4 === num1) num4 = 0;
+
+    if(num3) num4 = 0;
     
     let data = google.visualization.arrayToDataTable([
       ['Task', ''],
@@ -224,6 +230,7 @@ import usuarios from '../usuario.js'
       title: 'Lucro/Negativo',
       is3D: true,
       colors: ['#66BB6A', '#FF7043', '#1E88E5'], // Verde para lucro, laranja para negativo, azul para entrada
+      legend: 'none'
     };
   
     var chart = new google.visualization.PieChart(document.getElementById('piechartT'));
@@ -351,6 +358,7 @@ import usuarios from '../usuario.js'
 
     function renderizarTabela(transacoes) {
 
+
       tabela.innerHTML = '';  
 
       transacoes.forEach((transacao) => {
@@ -385,7 +393,7 @@ import usuarios from '../usuario.js'
               <td>${transacao.categoria}</td>
               <td>${transacao.tipo}</td>
               <td style="color:green; font-weight:bold;">${transacao.status}</td>
-              <td style="font-weight:bold; text-align:center;">1x</td>
+              <td style="font-weight:bold; text-align:center;">1x</td> 
               <td style="font-weight:bold; text-align:center;">${transacao.parcelado}</td>
               <td >${transacao.vencimento}</td>
               <td><span class="editar"><i class="fas fa-edit" id="${transacao.id}"></i></span></td>
@@ -425,6 +433,7 @@ import usuarios from '../usuario.js'
     }
     renderizarTabela(transacoes);
     
+
 
     function editarTransacao(i) {
       
@@ -470,23 +479,33 @@ import usuarios from '../usuario.js'
       $("#excluirRegistro").on("click", () => {
   
             let index = transacoes.findIndex(transacao => transacao.id === Number(i))
-  
+          
+              console.log(transacoes[index])
+
+            if(transacoes[index].parcelado && transacoes[index].parcelado !== undefined){
+              console.log(transacoes[index].parcelado)
+            }
+
+
+
+
             if (index !== -1) { 
               transacoes.splice(index, 1); 
+              
             }
-            console.log(transacoes, index)
+           
   
-            setTimeout(() => {
-              localStorage.setItem('transacoes', JSON.stringify(transacoes));
-              setTimeout(() => {
-                $("#modalEditar").attr("class", "modalOFF") 
-                  aplicarFiltroData()
-                  carregarTransacoes()
-                  drawChartD()
-                  drawChartR()
-                  drawChartT()
-              }, 200);
-            }, 200);
+            // setTimeout(() => {
+            //   localStorage.setItem('transacoes', JSON.stringify(transacoes));
+            //   setTimeout(() => {
+            //     $("#modalEditar").attr("class", "modalOFF") 
+            //       aplicarFiltroData()
+            //       carregarTransacoes()
+            //       drawChartD()
+            //       drawChartR()
+            //       drawChartT()
+            //   }, 200);
+            // }, 200);
   
           })
   
@@ -532,6 +551,27 @@ import usuarios from '../usuario.js'
   $("#fecharModalEdicao").on("click", () => {
     $("#modalEditar").attr("class", "modalOFF") 
   })
+
+
+
+  $("#filtro").on("click", () => {  
+      
+    console.log("1")
+
+    let filtro = $(".pesquisa-container");
+    
+    if (filtro.length === 0) {
+      $(".pesquisa-containerOn").each(function() {
+        $(this).removeClass("pesquisa-containerOn").addClass("pesquisa-container");
+      });
+    }
+    filtro.each(function() {
+      if ($(this).hasClass('pesquisa-container')) {
+        $(this).removeClass('pesquisa-container').addClass('pesquisa-containerOn');
+      }
+    });
+  });
+
 
   $("#outros").on("click", () => {
 
@@ -633,6 +673,18 @@ import usuarios from '../usuario.js'
 
 
   $("#dataHoje").on("input", (e) => {
+
+    $(".linha").css({"width":"0%"})
+
+    setTimeout(() => {
+      $(".linha").css({"width":"100%", "background-color":"rgba(202, 201, 201, 0.705)"})
+
+      setTimeout(() => {
+        $(".linha").css({"background-color":"transparent", "transition":".5s"})
+      }, 500); 
+
+    }, 500); 
+   
  
     const hoje = new Date();  
     const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');  
